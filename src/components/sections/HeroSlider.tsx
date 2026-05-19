@@ -110,7 +110,7 @@ export default function HeroSlider() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.6 }}
-              className="font-barlow text-6xl md:text-8xl lg:text-9xl text-light leading-none tracking-tight mb-4 max-w-3xl"
+              className="font-cormorant text-6xl md:text-8xl lg:text-9xl text-light leading-none tracking-tight mb-4 max-w-3xl"
             >
               {slide.name}
             </motion.h1>
@@ -159,7 +159,7 @@ export default function HeroSlider() {
         ))}
       </div>
 
-      <div className="absolute bottom-8 right-8 z-10 font-barlow text-white/30 text-sm tracking-widest">
+      <div className="absolute bottom-8 right-8 z-10 font-cormorant text-white/30 text-sm tracking-widest">
         {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
       </div>
     </section>

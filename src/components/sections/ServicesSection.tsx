@@ -33,7 +33,7 @@ export default function ServicesSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="mb-14 text-center">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">What We Do</p>
-          <h2 className="font-barlow text-5xl md:text-6xl text-dark leading-tight">Our Services</h2>
+          <h2 className="font-cormorant text-5xl md:text-6xl text-dark leading-tight">Our Services</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -48,7 +48,7 @@ export default function ServicesSection() {
                   size={32}
                   className="text-gold mb-6 group-hover:scale-110 transition-transform duration-300"
                 />
-                <h3 className="font-barlow text-2xl text-dark group-hover:text-light mb-3 transition-colors duration-300">
+                <h3 className="font-cormorant text-2xl text-dark group-hover:text-light mb-3 transition-colors duration-300">
                   {service.title}
                 </h3>
                 <p className="text-grey group-hover:text-light/70 text-sm leading-relaxed transition-colors duration-300">

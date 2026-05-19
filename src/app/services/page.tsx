@@ -84,7 +84,7 @@ export default function ServicesPage() {
       <div className="bg-dark-card border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">What We Offer</p>
-          <h1 className="font-barlow text-6xl md:text-8xl text-light leading-none mb-6">
+          <h1 className="font-cormorant text-6xl md:text-8xl text-light leading-none mb-6">
             Our Services
           </h1>
           <p className="text-grey text-base max-w-2xl leading-relaxed">
@@ -110,7 +110,7 @@ export default function ServicesPage() {
                     <div className="bg-gold/10 border border-gold/20 p-3">
                       <Icon size={28} className="text-gold" />
                     </div>
-                    <h2 className="font-barlow text-4xl text-light">{service.title}</h2>
+                    <h2 className="font-cormorant text-4xl text-light">{service.title}</h2>
                   </div>
                   <p className="text-grey leading-relaxed mb-6">{service.description}</p>
                   <ul className="space-y-3">
@@ -140,7 +140,7 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-14">
             <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">How We Work</p>
-            <h2 className="font-barlow text-5xl text-light">Our Process</h2>
+            <h2 className="font-cormorant text-5xl text-light">Our Process</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {processSteps.map((step, i) => (
@@ -149,8 +149,8 @@ export default function ServicesPage() {
                   <div className="hidden md:block absolute top-8 left-full w-full h-px bg-gold/20 z-0" />
                 )}
                 <div className="relative bg-dark border border-white/10 p-6">
-                  <span className="font-barlow text-5xl text-gold/20 block mb-3">{step.step}</span>
-                  <h3 className="font-barlow text-2xl text-light mb-2">{step.title}</h3>
+                  <span className="font-cormorant text-5xl text-gold/20 block mb-3">{step.step}</span>
+                  <h3 className="font-cormorant text-2xl text-light mb-2">{step.title}</h3>
                   <p className="text-grey text-sm leading-relaxed">{step.description}</p>
                 </div>
               </div>

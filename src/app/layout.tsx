@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, DM_Sans } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-const barlowCondensed = Barlow_Condensed({
-  weight: "700",
+const cormorantGaramond = Cormorant_Garamond({
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-barlow-condensed",
+  variable: "--font-cormorant-garamond",
 });
 
 const dmSans = DM_Sans({
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${barlowCondensed.variable} ${dmSans.variable}`}
+      className={`${cormorantGaramond.variable} ${dmSans.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <Navbar />

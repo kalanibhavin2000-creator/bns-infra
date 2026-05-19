@@ -38,7 +38,7 @@ export default function FeaturedProjects() {
         <div className="flex items-end justify-between mb-12">
           <div>
             <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">Our Work</p>
-            <h2 className="font-barlow text-5xl md:text-6xl text-light leading-tight">
+            <h2 className="font-cormorant text-5xl md:text-6xl text-light leading-tight">
               Featured Projects
             </h2>
           </div>
@@ -77,7 +77,7 @@ export default function FeaturedProjects() {
               </div>
 
               <div className="p-6">
-                <h3 className="font-barlow text-2xl text-light mb-1 group-hover:text-gold transition-colors">
+                <h3 className="font-cormorant text-2xl text-light mb-1 group-hover:text-gold transition-colors">
                   {project.name}
                 </h3>
                 <p className="text-grey text-sm mb-3">{project.client}</p>

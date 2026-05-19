@@ -30,7 +30,7 @@ function CountUp({ end, suffix, trigger }: { end: number; suffix: string; trigge
   }, [end, trigger]);
 
   return (
-    <span className="font-barlow text-5xl md:text-6xl text-gold">
+    <span className="font-cormorant text-5xl md:text-6xl text-gold">
       {count}
       {suffix}
     </span>

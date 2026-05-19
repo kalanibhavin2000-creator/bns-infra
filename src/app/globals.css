@@ -17,8 +17,13 @@
 }
 
 @theme inline {
-  --font-barlow: var(--font-barlow-condensed);
+  --font-cormorant: var(--font-cormorant-garamond);
   --font-dmsans: var(--font-dm-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 html {

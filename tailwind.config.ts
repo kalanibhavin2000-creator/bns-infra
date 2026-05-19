@@ -16,7 +16,7 @@ const config: Config = {
         grey: '#6B6B6B',
       },
       fontFamily: {
-        barlow: ['var(--font-barlow-condensed)', 'sans-serif'],
+        cormorant: ['var(--font-cormorant-garamond)', 'serif'],
         dmsans: ['var(--font-dm-sans)', 'sans-serif'],
       },
     },

@@ -33,7 +33,7 @@ export default function WhyBNS() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="mb-14 text-center">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">Our Edge</p>
-          <h2 className="font-barlow text-5xl md:text-6xl text-light leading-tight">
+          <h2 className="font-cormorant text-5xl md:text-6xl text-light leading-tight">
             Why Choose BNS Infra
           </h2>
         </div>
@@ -51,7 +51,7 @@ export default function WhyBNS() {
                     <Icon size={24} className="text-gold" />
                   </div>
                   <div>
-                    <h3 className="font-barlow text-2xl text-light mb-3">{usp.title}</h3>
+                    <h3 className="font-cormorant text-2xl text-light mb-3">{usp.title}</h3>
                     <p className="text-grey text-sm leading-relaxed">{usp.description}</p>
                   </div>
                 </div>

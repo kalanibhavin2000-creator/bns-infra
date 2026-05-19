@@ -30,7 +30,7 @@ export default function ProjectsPage() {
       <div className="pt-20 bg-dark">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">Portfolio</p>
-          <h1 className="font-barlow text-6xl md:text-7xl text-light mb-10">Our Projects</h1>
+          <h1 className="font-cormorant text-6xl md:text-7xl text-light mb-10">Our Projects</h1>
 
           <div className="flex flex-wrap gap-3 mb-12">
             {categories.map((cat) => (
@@ -73,7 +73,7 @@ export default function ProjectsPage() {
                   </span>
                 </div>
                 <div className="p-5">
-                  <h3 className="font-barlow text-xl text-light mb-1 group-hover:text-gold transition-colors">
+                  <h3 className="font-cormorant text-xl text-light mb-1 group-hover:text-gold transition-colors">
                     {project.name}
                   </h3>
                   <p className="text-grey text-xs mb-2">{project.client}</p>

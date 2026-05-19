@@ -55,7 +55,7 @@ export default function ContactPage() {
       <div className="bg-dark-card border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">Reach Out</p>
-          <h1 className="font-barlow text-6xl md:text-7xl text-light leading-none">
+          <h1 className="font-cormorant text-6xl md:text-7xl text-light leading-none">
             Get in Touch
           </h1>
         </div>
@@ -64,7 +64,7 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
-            <h2 className="font-barlow text-3xl text-light mb-8">Contact Information</h2>
+            <h2 className="font-cormorant text-3xl text-light mb-8">Contact Information</h2>
             <div className="space-y-6 mb-10">
               <div className="flex items-start gap-4">
                 <div className="bg-gold/10 border border-gold/20 p-3 shrink-0">
@@ -121,12 +121,12 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <h2 className="font-barlow text-3xl text-light mb-8">Send Us a Message</h2>
+            <h2 className="font-cormorant text-3xl text-light mb-8">Send Us a Message</h2>
 
             {submitted ? (
               <div className="bg-dark-card border border-gold/30 p-10 text-center">
                 <CheckCircle size={48} className="text-gold mx-auto mb-4" />
-                <h3 className="font-barlow text-3xl text-light mb-3">Message Sent!</h3>
+                <h3 className="font-cormorant text-3xl text-light mb-3">Message Sent!</h3>
                 <p className="text-grey text-sm leading-relaxed mb-6">
                   Thank you for reaching out. Our team will get back to you within 24 hours.
                 </p>

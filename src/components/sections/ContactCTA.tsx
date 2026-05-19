@@ -26,7 +26,7 @@ export default function ContactCTA() {
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <p className="text-gold text-xs tracking-[0.3em] uppercase mb-5">Get Started</p>
-        <h2 className="font-barlow text-5xl md:text-7xl text-light leading-tight mb-6">
+        <h2 className="font-cormorant text-5xl md:text-7xl text-light leading-tight mb-6">
           Ready to Build Something Great?
         </h2>
         <p className="text-grey text-base leading-relaxed mb-10 max-w-xl mx-auto">

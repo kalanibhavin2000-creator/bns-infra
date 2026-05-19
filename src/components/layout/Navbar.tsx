@@ -36,7 +36,7 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
-          <Link href="/" className="font-barlow text-2xl tracking-widest text-gold">
+          <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold">
             BNS INFRA
           </Link>
 
@@ -88,7 +88,7 @@ export default function Navbar() {
               transition={{ type: "tween", duration: 0.3 }}
             >
               <div className="flex items-center justify-between px-6 h-20 border-b border-white/10">
-                <span className="font-barlow text-xl tracking-widest text-gold">BNS INFRA</span>
+                <span className="font-cormorant text-xl tracking-widest text-gold">BNS INFRA</span>
                 <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
                   <X size={22} className="text-light" />
                 </button>

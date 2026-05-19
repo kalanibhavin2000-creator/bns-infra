@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="font-barlow text-2xl tracking-widest text-gold mb-4">BNS INFRA</h3>
+            <h3 className="font-cormorant text-2xl tracking-widest text-gold mb-4">BNS INFRA</h3>
             <p className="text-grey text-sm leading-relaxed mb-4">
               Precision Tiling for Every Scale
             </p>
@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-light font-barlow text-lg tracking-wider uppercase mb-6">
+            <h4 className="text-light font-cormorant text-lg tracking-wider uppercase mb-6">
               Quick Links
             </h4>
             <ul className="space-y-3">
@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-light font-barlow text-lg tracking-wider uppercase mb-6">
+            <h4 className="text-light font-cormorant text-lg tracking-wider uppercase mb-6">
               Contact Info
             </h4>
             <ul className="space-y-4">
