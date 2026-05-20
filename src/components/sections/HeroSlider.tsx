@@ -87,12 +87,12 @@ export default function HeroSlider() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
           {/* Main content — pt-24 keeps it below the fixed navbar */}
-          <div className="relative h-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col justify-center pt-20">
+          <div className="relative h-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col justify-center pt-20 pb-16">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="font-cormorant text-6xl md:text-8xl lg:text-9xl text-light leading-none tracking-tight mb-4 max-w-3xl"
+              className="font-cormorant text-6xl lg:text-7xl text-light leading-none tracking-tight mb-4 max-w-3xl"
             >
               {slide.name}
             </motion.h1>
