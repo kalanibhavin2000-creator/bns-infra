@@ -13,18 +13,55 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
+const bezier: [number, number, number, number] = [0.76, 0, 0.24, 1];
+
+const overlayVariants = {
+  hidden: { clipPath: "inset(0 0 100% 0)" },
+  visible: {
+    clipPath: "inset(0 0 0% 0)",
+    transition: { duration: 0.6, ease: bezier },
+  },
+  exit: {
+    clipPath: "inset(0 0 100% 0)",
+    transition: { duration: 0.5, ease: bezier },
+  },
+};
+
+const listVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.35 } },
+  exit: { transition: { staggerChildren: 0.04, staggerDirection: -1 as const } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: bezier },
+  },
+  exit: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   return (
     <>
+      {/* ── Navbar bar ── */}
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300"
         style={{
@@ -36,92 +73,88 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
-          <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold">
+          <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold z-10">
             BNS INFRA
           </Link>
 
-          <ul className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="text-sm tracking-wider text-light/80 hover:text-gold transition-colors duration-200 uppercase"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <Link
-            href="/contact"
-            className="hidden md:inline-flex items-center px-5 py-2 border border-gold text-gold text-sm tracking-wider uppercase hover:bg-gold hover:text-dark transition-all duration-200"
-          >
-            Get a Quote
-          </Link>
-
           <button
-            className="md:hidden text-light p-2"
-            onClick={() => setMobileOpen(true)}
+            onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
+            className="p-2 z-10"
+            style={{ color: "#C8A96E" }}
           >
-            <Menu size={24} />
+            <Menu size={26} />
           </button>
         </div>
       </motion.nav>
 
+      {/* ── Full-screen overlay menu ── */}
       <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              className="fixed inset-0 z-40 bg-black/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-            />
-            <motion.div
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 bg-dark-card flex flex-col"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.3 }}
-            >
-              <div className="flex items-center justify-between px-6 h-20 border-b border-white/10">
-                <span className="font-cormorant text-xl tracking-widest text-gold">BNS INFRA</span>
-                <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-                  <X size={22} className="text-light" />
-                </button>
-              </div>
-              <ul className="flex flex-col gap-2 p-6 flex-1">
-                {navLinks.map((link, i) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ x: 30, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.05 * i }}
-                  >
+        {menuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[200] flex flex-col"
+            style={{ backgroundColor: "#1A1A1A" }}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {/* Close button */}
+            <div className="flex items-center justify-between px-6 lg:px-8 h-20 shrink-0">
+              <Link
+                href="/"
+                className="font-cormorant text-2xl tracking-widest text-gold"
+                onClick={() => setMenuOpen(false)}
+              >
+                BNS INFRA
+              </Link>
+              <button
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+                style={{ color: "#C8A96E" }}
+                className="p-2"
+              >
+                <X size={26} />
+              </button>
+            </div>
+
+            {/* Links — centered vertically and horizontally */}
+            <div className="flex-1 flex flex-col items-center justify-center gap-2">
+              <motion.ul
+                className="flex flex-col items-center gap-4 lg:gap-6"
+                variants={listVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                {navLinks.map((link) => (
+                  <motion.li key={link.href} variants={itemVariants}>
                     <Link
                       href={link.href}
-                      className="block py-3 text-light/80 hover:text-gold tracking-wider uppercase text-sm border-b border-white/10 transition-colors"
-                      onClick={() => setMobileOpen(false)}
+                      onClick={() => setMenuOpen(false)}
+                      className="font-cormorant text-5xl lg:text-7xl uppercase text-white hover:text-gold transition-colors duration-200 tracking-wide"
                     >
                       {link.label}
                     </Link>
                   </motion.li>
                 ))}
-              </ul>
-              <div className="p-6">
+              </motion.ul>
+
+              {/* GET A QUOTE button */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-10"
+              >
                 <Link
                   href="/contact"
-                  className="block text-center px-5 py-3 border border-gold text-gold text-sm tracking-wider uppercase hover:bg-gold hover:text-dark transition-all duration-200"
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-block px-8 py-3 border border-gold text-gold text-sm tracking-widest uppercase hover:bg-gold hover:text-dark transition-all duration-200"
                 >
                   Get a Quote
                 </Link>
-              </div>
-            </motion.div>
-          </>
+              </motion.div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
