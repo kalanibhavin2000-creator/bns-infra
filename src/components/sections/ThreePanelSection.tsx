@@ -40,6 +40,11 @@ const panels = [
 const EASE = [0.4, 0, 0.2, 1] as const;
 const DUR = 0.4;
 
+// Default y-offset pushes title from its top-8 anchor down to just above the button.
+// Panel is min 500px; button area occupies ~96px from bottom (32px pad + 44px button + 20px gap).
+// Title at top-8 (32px) + 320px ≈ 352px from top → ~148px from bottom, above the button.
+const TITLE_Y_DEFAULT = 320;
+
 function Panel({ panel }: { panel: (typeof panels)[0] }) {
   const [hovered, setHovered] = useState(false);
 
@@ -56,13 +61,13 @@ function Panel({ panel }: { panel: (typeof panels)[0] }) {
         style={{ backgroundImage: `url('${panel.image}')` }}
       />
 
-      {/* Dark gradient covering bottom 50% — always present */}
+      {/* Dark gradient — bottom 50%, always present */}
       <div
         className="absolute inset-x-0 bottom-0 h-1/2"
         style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85), transparent)" }}
       />
 
-      {/* Cream overlay — fades in to 90% opacity on hover */}
+      {/* Cream overlay — fades in to 90% on hover */}
       <motion.div
         className="absolute inset-0"
         style={{ backgroundColor: "#F5F3EF" }}
@@ -70,12 +75,29 @@ function Panel({ panel }: { panel: (typeof panels)[0] }) {
         transition={{ duration: DUR, ease: EASE }}
       />
 
-      {/* Category label — always top-left in gold */}
-      <p className="absolute top-8 left-8 z-10 text-gold text-xs tracking-widest uppercase">
+      {/* Category label — top-left, fades OUT on hover */}
+      <motion.p
+        className="absolute top-8 left-8 z-10 text-gold text-xs tracking-widest uppercase"
+        animate={{ opacity: hovered ? 0 : 1 }}
+        transition={{ duration: DUR, ease: EASE }}
+      >
         {panel.category}
-      </p>
+      </motion.p>
 
-      {/* Description — centered in panel, fades in on hover */}
+      {/* Title — anchored top-8 left-8, translated DOWN in default state,
+          slides UP to top-left on hover */}
+      <motion.h2
+        className="absolute top-8 left-8 right-8 z-10 font-cormorant text-4xl leading-tight"
+        animate={{
+          y: hovered ? 0 : TITLE_Y_DEFAULT,
+          color: hovered ? "#1A1A1A" : "#F5F3EF",
+        }}
+        transition={{ duration: DUR, ease: EASE }}
+      >
+        {panel.title}
+      </motion.h2>
+
+      {/* Description — centered, fades in on hover */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center px-10 z-10 pointer-events-none"
         animate={{ opacity: hovered ? 1 : 0 }}
@@ -89,16 +111,8 @@ function Panel({ panel }: { panel: (typeof panels)[0] }) {
         </p>
       </motion.div>
 
-      {/* Bottom block — title + button, always visible */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
-        <motion.h2
-          className="font-cormorant text-4xl leading-tight mb-5"
-          animate={{ color: hovered ? "#1A1A1A" : "#F5F3EF" }}
-          transition={{ duration: DUR, ease: EASE }}
-        >
-          {panel.title}
-        </motion.h2>
-
+      {/* Button — always at bottom-left */}
+      <div className="absolute bottom-0 left-0 p-8 z-10">
         <motion.div
           className="inline-block border w-fit"
           animate={{
