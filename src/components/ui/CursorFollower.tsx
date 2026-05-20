@@ -59,7 +59,7 @@ export default function CursorFollower() {
         }}
       />
       <motion.div
-        className="fixed pointer-events-none z-[9998] rounded-full"
+        className="fixed pointer-events-none z-[9999] rounded-full"
         style={{
           left: dot2X,
           top: dot2Y,
