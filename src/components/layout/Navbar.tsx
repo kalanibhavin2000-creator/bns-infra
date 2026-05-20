@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -45,15 +45,27 @@ const itemVariants = {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [navVisible, setNavVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      setScrolled(currentY > 50);
+      // At the top always show; otherwise show on scroll-up, hide on scroll-down
+      if (currentY < 50) {
+        setNavVisible(true);
+      } else {
+        setNavVisible(currentY < lastScrollY.current);
+      }
+      lastScrollY.current = currentY;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Prevent body scroll when menu is open
+  // Lock body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -61,7 +73,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── Navbar bar ── */}
+      {/* ── Navbar bar (logo only) — slides up on scroll down ── */}
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300"
         style={{
@@ -69,24 +81,27 @@ export default function Navbar() {
           borderBottom: scrolled ? "1px solid rgba(200,169,110,0.15)" : "none",
         }}
         initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        animate={{ y: navVisible ? 0 : -80 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
-          <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-20">
+          <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold">
             BNS INFRA
           </Link>
-
-          <button
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
-            className="p-2 z-10"
-            style={{ color: "#C8A96E" }}
-          >
-            <Menu size={26} />
-          </button>
         </div>
       </motion.nav>
+
+      {/* ── Hamburger — always fixed top-right, independent of navbar ── */}
+      {!menuOpen && (
+        <button
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open menu"
+          className="fixed top-4 right-6 lg:right-8 z-[60] w-12 h-12 rounded-full flex items-center justify-center border border-gold/50 bg-black/40 backdrop-blur-sm"
+          style={{ color: "#C8A96E" }}
+        >
+          <Menu size={32} />
+        </button>
+      )}
 
       {/* ── Full-screen overlay menu ── */}
       <AnimatePresence>
@@ -99,7 +114,7 @@ export default function Navbar() {
             animate="visible"
             exit="exit"
           >
-            {/* Close button */}
+            {/* Top bar inside menu */}
             <div className="flex items-center justify-between px-6 lg:px-8 h-20 shrink-0">
               <Link
                 href="/"
@@ -108,20 +123,21 @@ export default function Navbar() {
               >
                 BNS INFRA
               </Link>
+              {/* Close button — same size/style as hamburger */}
               <button
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
+                className="w-12 h-12 rounded-full flex items-center justify-center border border-gold/50"
                 style={{ color: "#C8A96E" }}
-                className="p-2"
               >
-                <X size={26} />
+                <X size={32} />
               </button>
             </div>
 
-            {/* Links — centered vertically and horizontally */}
+            {/* Links — centered */}
             <div className="flex-1 flex flex-col items-center justify-center gap-2">
               <motion.ul
-                className="flex flex-col items-center gap-4 lg:gap-6"
+                className="flex flex-col items-center gap-3 lg:gap-4"
                 variants={listVariants}
                 initial="hidden"
                 animate="visible"
@@ -132,7 +148,7 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
-                      className="font-cormorant text-5xl lg:text-7xl uppercase text-white hover:text-gold transition-colors duration-200 tracking-wide"
+                      className="font-cormorant text-3xl lg:text-4xl uppercase text-white hover:text-gold transition-colors duration-200 tracking-wide"
                     >
                       {link.label}
                     </Link>
@@ -140,11 +156,8 @@ export default function Navbar() {
                 ))}
               </motion.ul>
 
-              {/* GET A QUOTE button */}
-              <motion.div
-                variants={itemVariants}
-                className="mt-10"
-              >
+              {/* GET A QUOTE */}
+              <motion.div variants={itemVariants} className="mt-8">
                 <Link
                   href="/contact"
                   onClick={() => setMenuOpen(false)}
