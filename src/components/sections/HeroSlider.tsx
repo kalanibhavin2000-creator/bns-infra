@@ -71,7 +71,13 @@ export default function HeroSlider() {
   const slide = slides[current];
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <motion.section
+      className="relative h-screen overflow-hidden pt-20"
+      initial={{ clipPath: "inset(100% 0 0 0)" }}
+      whileInView={{ clipPath: "inset(0% 0 0 0)" }}
+      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      viewport={{ once: true }}
+    >
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={slide.id}
@@ -162,6 +168,6 @@ export default function HeroSlider() {
       <div className="absolute bottom-8 right-8 z-10 font-cormorant text-white/30 text-sm tracking-widest">
         {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
       </div>
-    </section>
+    </motion.section>
   );
 }

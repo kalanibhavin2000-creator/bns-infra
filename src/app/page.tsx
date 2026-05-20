@@ -1,19 +1,13 @@
 import HeroSlider from "@/components/sections/HeroSlider";
 import StatsBar from "@/components/sections/StatsBar";
-import FeaturedProjects from "@/components/sections/FeaturedProjects";
-import ServicesSection from "@/components/sections/ServicesSection";
-import WhyBNS from "@/components/sections/WhyBNS";
-import ContactCTA from "@/components/sections/ContactCTA";
+import ThreePanelSection from "@/components/sections/ThreePanelSection";
 
 export default function HomePage() {
   return (
     <>
       <HeroSlider />
       <StatsBar />
-      <FeaturedProjects />
-      <ServicesSection />
-      <WhyBNS />
-      <ContactCTA />
+      <ThreePanelSection />
     </>
   );
 }

@@ -3,6 +3,8 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import PageTransition from "@/components/layout/PageTransition";
+import CursorFollower from "@/components/ui/CursorFollower";
 
 const cormorantGaramond = Cormorant_Garamond({
   weight: ["400", "600", "700"],
@@ -35,8 +37,11 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${dmSans.variable}`}
     >
       <body className="min-h-screen flex flex-col">
+        <CursorFollower />
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <PageTransition>
+          <main className="flex-1">{children}</main>
+        </PageTransition>
         <Footer />
       </body>
     </html>
