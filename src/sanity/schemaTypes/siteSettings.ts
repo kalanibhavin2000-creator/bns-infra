@@ -1,4 +1,6 @@
-export default {
+import { type SchemaTypeDefinition } from 'sanity'
+
+const siteSettings: SchemaTypeDefinition = {
   name: 'siteSettings',
   title: 'Site Settings',
   type: 'document',
@@ -18,10 +20,10 @@ export default {
       of: [{
         type: 'object', fields: [
           { name: 'platform', title: 'Platform', type: 'string',
-            options: { list: ['facebook', 'instagram', 'linkedin', 'youtube', 'twitter'] }},
-          { name: 'url', title: 'URL', type: 'string' }
-        ]
-      }]
+            options: { list: ['facebook', 'instagram', 'linkedin', 'youtube', 'twitter'] } },
+          { name: 'url', title: 'URL', type: 'string' },
+        ],
+      }],
     },
     {
       name: 'seo', title: 'SEO Settings', type: 'object',
@@ -29,8 +31,10 @@ export default {
         { name: 'metaTitle', title: 'Default Meta Title', type: 'string' },
         { name: 'metaDescription', title: 'Default Meta Description', type: 'text' },
         { name: 'ogImage', title: 'Default OG Image (1200x630)', type: 'image' },
-        { name: 'keywords', title: 'Keywords (comma separated)', type: 'string' }
-      ]
-    }
-  ]
+        { name: 'keywords', title: 'Keywords (comma separated)', type: 'string' },
+      ],
+    },
+  ],
 }
+
+export default siteSettings

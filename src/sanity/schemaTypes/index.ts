@@ -1,3 +1,5 @@
+import { type SchemaTypeDefinition } from 'sanity'
+
 import siteSettings from './siteSettings'
 import heroSlide from './heroSlide'
 import stat from './stat'
@@ -8,7 +10,16 @@ import aboutPage from './aboutPage'
 import threePanelSection from './threePanelSection'
 import contactPage from './contactPage'
 
-export const schemaTypes = [
-  siteSettings, heroSlide, stat, project,
-  service, teamMember, aboutPage, threePanelSection, contactPage
-]
+export const schema: { types: SchemaTypeDefinition[] } = {
+  types: [
+    siteSettings,
+    heroSlide,
+    stat,
+    project,
+    service,
+    teamMember,
+    aboutPage,
+    threePanelSection,
+    contactPage,
+  ],
+}

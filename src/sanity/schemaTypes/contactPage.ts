@@ -1,4 +1,6 @@
-export default {
+import { type SchemaTypeDefinition } from 'sanity'
+
+const contactPage: SchemaTypeDefinition = {
   name: 'contactPage',
   title: 'Contact Page',
   type: 'document',
@@ -15,8 +17,10 @@ export default {
       fields: [
         { name: 'metaTitle', title: 'Meta Title', type: 'string' },
         { name: 'metaDescription', title: 'Meta Description', type: 'text' },
-        { name: 'ogImage', title: 'OG Image', type: 'image' }
-      ]
-    }
-  ]
+        { name: 'ogImage', title: 'OG Image', type: 'image' },
+      ],
+    },
+  ],
 }
+
+export default contactPage
