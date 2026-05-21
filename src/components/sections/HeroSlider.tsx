@@ -4,46 +4,46 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { urlFor } from "@/lib/sanity";
 
-const slides = [
-  {
-    id: 1,
-    category: "High-Rise",
-    name: "Titanium World Tower",
-    location: "Surat, Gujarat",
-    image: "/images/building-highrise.jpg",
-  },
-  {
-    id: 2,
-    category: "Commercial",
-    name: "Inorbit Mall Tiling",
-    location: "Vadodara, Gujarat",
-    image: "/images/building-commercial.jpg",
-  },
-  {
-    id: 3,
-    category: "Residential",
-    name: "Green Valley Residency",
-    location: "Ahmedabad, Gujarat",
-    image: "/images/building-residential.jpg",
-  },
-  {
-    id: 4,
-    category: "Industrial",
-    name: "Zydus Pharma Complex",
-    location: "Ahmedabad, Gujarat",
-    image: "/images/bns-office.jpeg",
-  },
-  {
-    id: 5,
-    category: "High-Rise",
-    name: "Blue Sapphire Heights",
-    location: "Surat, Gujarat",
-    image: "/images/highrise-render.webp",
-  },
+type SanitySlide = {
+  _id: string;
+  title: string;
+  location?: string;
+  category?: string;
+  backgroundImage?: { asset: { _ref: string } };
+  order?: number;
+};
+
+const fallbackSlides = [
+  { id: 1, category: "High-Rise", name: "Titanium World Tower", location: "Surat, Gujarat", image: "/images/building-highrise.jpg" },
+  { id: 2, category: "Commercial", name: "Inorbit Mall Tiling", location: "Vadodara, Gujarat", image: "/images/building-commercial.jpg" },
+  { id: 3, category: "Residential", name: "Green Valley Residency", location: "Ahmedabad, Gujarat", image: "/images/building-residential.jpg" },
+  { id: 4, category: "Industrial", name: "Zydus Pharma Complex", location: "Ahmedabad, Gujarat", image: "/images/bns-office.jpeg" },
+  { id: 5, category: "High-Rise", name: "Blue Sapphire Heights", location: "Surat, Gujarat", image: "/images/highrise-render.webp" },
 ];
 
-export default function HeroSlider() {
+type NormalizedSlide = {
+  id: string | number;
+  category: string;
+  name: string;
+  location: string;
+  image: string;
+};
+
+function normalizeSlides(sanitySlides: SanitySlide[]): NormalizedSlide[] {
+  if (!sanitySlides || sanitySlides.length === 0) return fallbackSlides;
+  return sanitySlides.map((s) => ({
+    id: s._id,
+    category: s.category || '',
+    name: s.title,
+    location: s.location || '',
+    image: s.backgroundImage ? urlFor(s.backgroundImage).width(1920).height(1080).url() : '/images/building-highrise.jpg',
+  }));
+}
+
+export default function HeroSlider({ slides: rawSlides = [] }: { slides?: SanitySlide[] }) {
+  const slides = normalizeSlides(rawSlides);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -61,7 +61,7 @@ export default function HeroSlider() {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const slide = slides[current];
 
@@ -86,7 +86,6 @@ export default function HeroSlider() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-          {/* Main content — pt-24 keeps it below the fixed navbar */}
           <div className="relative h-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col justify-center pt-20 pb-16">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -124,7 +123,6 @@ export default function HeroSlider() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Dot navigation */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-10">
         {slides.map((_, i) => (
           <button
@@ -142,7 +140,6 @@ export default function HeroSlider() {
         ))}
       </div>
 
-      {/* Category tag — bottom right, above slide counter */}
       <motion.div
         key={`cat-${slide.id}`}
         initial={{ opacity: 0 }}
@@ -153,7 +150,6 @@ export default function HeroSlider() {
         <span className="text-gold text-xs tracking-[0.3em] uppercase">{slide.category}</span>
       </motion.div>
 
-      {/* Slide counter */}
       <div className="absolute bottom-8 right-8 z-10 font-cormorant text-white/30 text-sm tracking-widest">
         {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
       </div>

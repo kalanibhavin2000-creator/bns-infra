@@ -1,57 +1,55 @@
-"use client";
+import { Metadata } from "next";
+import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import ContactForm from "@/components/sections/ContactForm";
 
-import { useState } from "react";
-import { Phone, Mail, MapPin, MessageCircle, CheckCircle } from "lucide-react";
+export const metadata: Metadata = {
+  title: 'Contact Us — Get a Quote',
+  description: 'Contact BNS Constructions for tile pasting services in Gujarat. Call us or send a message to get a free quote for your construction project.',
+  openGraph: {
+    title: 'Contact BNS Constructions',
+    url: 'https://bns-infra.vercel.app/contact',
+  },
+  alternates: { canonical: 'https://bns-infra.vercel.app/contact' }
+}
 
-const projectTypes = [
-  "High-Rise Tiling",
-  "Residential Project",
-  "Commercial Project",
-  "Industrial Facility",
-  "Flooring & Wall Cladding",
-  "Other",
-];
-
-type FormState = {
-  name: string;
-  company: string;
-  phone: string;
-  email: string;
-  projectType: string;
-  message: string;
-};
-
-const emptyForm: FormState = {
-  name: "",
-  company: "",
-  phone: "",
-  email: "",
-  projectType: "",
-  message: "",
-};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What areas does BNS Constructions serve?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BNS Constructions serves Surat, Ahmedabad, Vadodara, and all major cities across Gujarat, India."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What type of tiling projects does BNS Constructions handle?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We handle high-rise residential, commercial, industrial, and all types of construction tile pasting projects."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I get a quote from BNS Constructions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can contact us via phone, WhatsApp, or fill in the contact form on our website to get a free project quote."
+      }
+    }
+  ]
+}
 
 export default function ContactPage() {
-  const [form, setForm] = useState<FormState>(emptyForm);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 1200);
-  }
-
   return (
     <div className="pt-20 bg-dark min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="bg-dark-card border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">Reach Out</p>
@@ -122,124 +120,7 @@ export default function ContactPage() {
 
           <div>
             <h2 className="font-cormorant text-3xl text-light mb-8">Send Us a Message</h2>
-
-            {submitted ? (
-              <div className="bg-dark-card border border-gold/30 p-10 text-center">
-                <CheckCircle size={48} className="text-gold mx-auto mb-4" />
-                <h3 className="font-cormorant text-3xl text-light mb-3">Message Sent!</h3>
-                <p className="text-grey text-sm leading-relaxed mb-6">
-                  Thank you for reaching out. Our team will get back to you within 24 hours.
-                </p>
-                <button
-                  onClick={() => { setSubmitted(false); setForm(emptyForm); }}
-                  className="text-gold text-sm tracking-wider uppercase border border-gold/40 px-6 py-2 hover:bg-gold hover:text-dark transition-all duration-200"
-                >
-                  Send Another
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="text-grey text-xs tracking-wider uppercase block mb-2">
-                      Name *
-                    </label>
-                    <input
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-dark-card border border-white/20 text-light text-sm px-4 py-3 focus:outline-none focus:border-gold/60 transition-colors placeholder:text-grey/50"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-grey text-xs tracking-wider uppercase block mb-2">
-                      Company
-                    </label>
-                    <input
-                      name="company"
-                      value={form.company}
-                      onChange={handleChange}
-                      className="w-full bg-dark-card border border-white/20 text-light text-sm px-4 py-3 focus:outline-none focus:border-gold/60 transition-colors placeholder:text-grey/50"
-                      placeholder="Company name"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="text-grey text-xs tracking-wider uppercase block mb-2">
-                      Phone *
-                    </label>
-                    <input
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      required
-                      type="tel"
-                      className="w-full bg-dark-card border border-white/20 text-light text-sm px-4 py-3 focus:outline-none focus:border-gold/60 transition-colors placeholder:text-grey/50"
-                      placeholder="+91 XXXXX XXXXX"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-grey text-xs tracking-wider uppercase block mb-2">
-                      Email
-                    </label>
-                    <input
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      type="email"
-                      className="w-full bg-dark-card border border-white/20 text-light text-sm px-4 py-3 focus:outline-none focus:border-gold/60 transition-colors placeholder:text-grey/50"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-grey text-xs tracking-wider uppercase block mb-2">
-                    Project Type
-                  </label>
-                  <select
-                    name="projectType"
-                    value={form.projectType}
-                    onChange={handleChange}
-                    className="w-full bg-dark-card border border-white/20 text-light text-sm px-4 py-3 focus:outline-none focus:border-gold/60 transition-colors appearance-none"
-                  >
-                    <option value="" className="text-grey">Select project type</option>
-                    {projectTypes.map((pt) => (
-                      <option key={pt} value={pt} className="bg-dark-card">
-                        {pt}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-grey text-xs tracking-wider uppercase block mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className="w-full bg-dark-card border border-white/20 text-light text-sm px-4 py-3 focus:outline-none focus:border-gold/60 transition-colors placeholder:text-grey/50 resize-none"
-                    placeholder="Tell us about your project..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gold text-dark text-sm tracking-wider uppercase font-medium py-4 hover:bg-gold/90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {loading ? "Sending..." : "Submit Enquiry"}
-                </button>
-              </form>
-            )}
+            <ContactForm />
           </div>
         </div>
       </div>

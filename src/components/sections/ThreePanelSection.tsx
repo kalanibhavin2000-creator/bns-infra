@@ -3,14 +3,29 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { urlFor } from "@/lib/sanity";
 
-const panels = [
+type SanityPanelData = {
+  panel1Heading?: string;
+  panel1Description?: string;
+  panel1ButtonText?: string;
+  panel1Image?: { asset: { _ref: string } };
+  panel2Heading?: string;
+  panel2Description?: string;
+  panel2ButtonText?: string;
+  panel2Image?: { asset: { _ref: string } };
+  panel3Heading?: string;
+  panel3Description?: string;
+  panel3ButtonText?: string;
+  panel3Image?: { asset: { _ref: string } };
+};
+
+const fallbackPanels = [
   {
     id: "about",
     category: "About Us",
     title: "Precision Tiling Expertise",
-    description:
-      "Gujarat's most trusted tile application contractor for high-rise residential and commercial construction. Built on precision, delivered on time.",
+    description: "Gujarat's most trusted tile application contractor for high-rise residential and commercial construction. Built on precision, delivered on time.",
     button: "About Us",
     href: "/about",
     image: "/images/tile-pasting.webp",
@@ -19,8 +34,7 @@ const panels = [
     id: "projects",
     category: "Portfolio",
     title: "Our Projects",
-    description:
-      "500+ completed projects across high-rise, residential and commercial construction throughout Gujarat and beyond.",
+    description: "500+ completed projects across high-rise, residential and commercial construction throughout Gujarat and beyond.",
     button: "View Portfolio",
     href: "/projects",
     image: "/images/highrise-render.webp",
@@ -29,23 +43,61 @@ const panels = [
     id: "services",
     category: "Services",
     title: "Our Services",
-    description:
-      "Complete tile application solutions from site survey to final handover. Every surface, every scale, every deadline met.",
+    description: "Complete tile application solutions from site survey to final handover. Every surface, every scale, every deadline met.",
     button: "Explore Services",
     href: "/services",
     image: "/images/building-residential.jpg",
   },
 ];
 
+type PanelConfig = {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  button: string;
+  href: string;
+  image: string;
+};
+
+function buildPanels(data: SanityPanelData | null): PanelConfig[] {
+  if (!data) return fallbackPanels;
+  return [
+    {
+      id: "about",
+      category: "About Us",
+      title: data.panel1Heading || fallbackPanels[0].title,
+      description: data.panel1Description || fallbackPanels[0].description,
+      button: data.panel1ButtonText || fallbackPanels[0].button,
+      href: "/about",
+      image: data.panel1Image ? urlFor(data.panel1Image).width(800).height(1000).url() : fallbackPanels[0].image,
+    },
+    {
+      id: "projects",
+      category: "Portfolio",
+      title: data.panel2Heading || fallbackPanels[1].title,
+      description: data.panel2Description || fallbackPanels[1].description,
+      button: data.panel2ButtonText || fallbackPanels[1].button,
+      href: "/projects",
+      image: data.panel2Image ? urlFor(data.panel2Image).width(800).height(1000).url() : fallbackPanels[1].image,
+    },
+    {
+      id: "services",
+      category: "Services",
+      title: data.panel3Heading || fallbackPanels[2].title,
+      description: data.panel3Description || fallbackPanels[2].description,
+      button: data.panel3ButtonText || fallbackPanels[2].button,
+      href: "/services",
+      image: data.panel3Image ? urlFor(data.panel3Image).width(800).height(1000).url() : fallbackPanels[2].image,
+    },
+  ];
+}
+
 const EASE = [0.4, 0, 0.2, 1] as const;
 const DUR = 0.4;
-
-// Default y-offset pushes title from its top-8 anchor down to just above the button.
-// Panel is min 500px; button area occupies ~96px from bottom (32px pad + 44px button + 20px gap).
-// Title at top-8 (32px) + 320px ≈ 352px from top → ~148px from bottom, above the button.
 const TITLE_Y_DEFAULT = 320;
 
-function Panel({ panel }: { panel: (typeof panels)[0] }) {
+function Panel({ panel }: { panel: PanelConfig }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -55,27 +107,20 @@ function Panel({ panel }: { panel: (typeof panels)[0] }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Full-bleed background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url('${panel.image}')` }}
       />
-
-      {/* Dark gradient — bottom 50%, always present */}
       <div
         className="absolute inset-x-0 bottom-0 h-1/2"
         style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85), transparent)" }}
       />
-
-      {/* Cream overlay — fades in to 90% on hover */}
       <motion.div
         className="absolute inset-0"
         style={{ backgroundColor: "#F5F3EF" }}
         animate={{ opacity: hovered ? 0.9 : 0 }}
         transition={{ duration: DUR, ease: EASE }}
       />
-
-      {/* Category label — top-left, fades OUT on hover */}
       <motion.p
         className="absolute top-8 left-8 z-10 text-gold text-xs tracking-widest uppercase"
         animate={{ opacity: hovered ? 0 : 1 }}
@@ -83,48 +128,29 @@ function Panel({ panel }: { panel: (typeof panels)[0] }) {
       >
         {panel.category}
       </motion.p>
-
-      {/* Title — anchored top-8 left-8, translated DOWN in default state,
-          slides UP to top-left on hover */}
       <motion.h2
         className="absolute top-8 left-8 right-8 z-10 font-cormorant text-4xl leading-tight"
-        animate={{
-          y: hovered ? 0 : TITLE_Y_DEFAULT,
-          color: hovered ? "#1A1A1A" : "#F5F3EF",
-        }}
+        animate={{ y: hovered ? 0 : TITLE_Y_DEFAULT, color: hovered ? "#1A1A1A" : "#F5F3EF" }}
         transition={{ duration: DUR, ease: EASE }}
       >
         {panel.title}
       </motion.h2>
-
-      {/* Description — centered, fades in on hover */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center px-10 z-10 pointer-events-none"
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: DUR, ease: EASE }}
       >
-        <p
-          className="text-center text-sm leading-relaxed max-w-[240px]"
-          style={{ color: "#1A1A1A", fontFamily: "var(--font-dm-sans)" }}
-        >
+        <p className="text-center text-sm leading-relaxed max-w-[240px]" style={{ color: "#1A1A1A", fontFamily: "var(--font-dm-sans)" }}>
           {panel.description}
         </p>
       </motion.div>
-
-      {/* Button — always at bottom-left */}
       <div className="absolute bottom-0 left-0 p-8 z-10">
         <motion.div
           className="inline-block border w-fit"
-          animate={{
-            backgroundColor: hovered ? "#1A1A1A" : "transparent",
-            borderColor: hovered ? "#1A1A1A" : "#F5F3EF",
-          }}
+          animate={{ backgroundColor: hovered ? "#1A1A1A" : "transparent", borderColor: hovered ? "#1A1A1A" : "#F5F3EF" }}
           transition={{ duration: DUR, ease: EASE }}
         >
-          <Link
-            href={panel.href}
-            className="block px-6 py-3 text-xs tracking-[0.2em] uppercase text-white"
-          >
+          <Link href={panel.href} className="block px-6 py-3 text-xs tracking-[0.2em] uppercase text-white">
             {panel.button}
           </Link>
         </motion.div>
@@ -133,7 +159,9 @@ function Panel({ panel }: { panel: (typeof panels)[0] }) {
   );
 }
 
-export default function ThreePanelSection() {
+export default function ThreePanelSection({ panelData = null }: { panelData?: SanityPanelData | null }) {
+  const panels = buildPanels(panelData);
+
   return (
     <section className="flex flex-col md:flex-row w-full">
       {panels.map((panel) => (

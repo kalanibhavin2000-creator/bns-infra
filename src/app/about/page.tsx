@@ -1,4 +1,19 @@
+import { Metadata } from "next";
 import { Scale, Clock, Award, ShieldCheck } from "lucide-react";
+import { client } from "@/lib/sanity";
+import { aboutPageQuery, teamQuery } from "@/lib/queries";
+
+export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: 'About Us — 20 Years of Precision',
+  description: "Learn about BNS Constructions — Gujarat's trusted tile pasting contractor with 20+ years of experience, 500+ projects, and a commitment to precision workmanship.",
+  openGraph: {
+    title: 'About BNS Constructions',
+    url: 'https://bns-infra.vercel.app/about',
+  },
+  alternates: { canonical: 'https://bns-infra.vercel.app/about' }
+}
 
 const stats = [
   { value: "500+", label: "Projects Completed" },
@@ -14,24 +29,36 @@ const usps = [
   { icon: ShieldCheck, title: "Safety First", description: "Zero-accident policy on every site." },
 ];
 
-const team = [
+const fallbackTeam = [
   { name: "Bhavesh Patel", role: "Founder & Managing Director" },
   { name: "Nilesh Shah", role: "Head of Operations" },
   { name: "Suresh Mehta", role: "Senior Project Manager" },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [aboutData, teamData] = await Promise.all([
+    client.fetch(aboutPageQuery).catch(() => null),
+    client.fetch(teamQuery).catch(() => []),
+  ]);
+
+  const team = teamData.length > 0
+    ? teamData.map((m: { name: string; role: string }) => ({ name: m.name, role: m.role }))
+    : fallbackTeam;
+
+  const heroHeading = aboutData?.heroHeading || "Built on Precision, Driven by Passion";
+  const heroSubtext = aboutData?.heroSubtext || "For over 15 years, BNS Constructions has been Gujarat's trusted name in tile pasting, transforming construction projects of every scale with craftsmanship and commitment.";
+  const storyHeading = aboutData?.storyHeading || "From a Small Crew to Gujarat's Leading Tile Contractor";
+
   return (
     <div className="pt-20 bg-dark">
       <div className="bg-dark-card border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">About BNS Infra</p>
+          <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">About BNS Constructions</p>
           <h1 className="font-cormorant text-6xl md:text-8xl text-light leading-none mb-6 max-w-3xl">
-            Built on Precision, Driven by Passion
+            {heroHeading}
           </h1>
           <p className="text-grey text-base max-w-2xl leading-relaxed">
-            For over 15 years, BNS Infra has been Gujarat&apos;s trusted name in tile pasting,
-            transforming construction projects of every scale with craftsmanship and commitment.
+            {heroSubtext}
           </p>
         </div>
       </div>
@@ -41,24 +68,30 @@ export default function AboutPage() {
           <div>
             <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">Our Story</p>
             <h2 className="font-cormorant text-4xl md:text-5xl text-light mb-6">
-              From a Small Crew to Gujarat&apos;s Leading Tile Contractor
+              {storyHeading}
             </h2>
             <div className="space-y-4 text-grey leading-relaxed">
-              <p>
-                BNS Infra was founded in 2010 by Bhavesh Patel with a team of just 12 tilers and a
-                vision to deliver precision tiling at every scale. Starting with residential projects
-                in Surat, the company quickly earned a reputation for quality and reliability.
-              </p>
-              <p>
-                By 2015, BNS Infra had expanded into commercial and industrial tiling, taking on
-                landmark projects including the Crystal Mall in Surat and the Zydus Pharma Complex
-                in Ahmedabad.
-              </p>
-              <p>
-                Today, with a workforce of 200+ skilled professionals and operations across 10+
-                cities in Gujarat, BNS Infra stands as the region&apos;s most trusted tile
-                pasting contractor for high-rise and large-scale construction.
-              </p>
+              {aboutData?.storyText ? (
+                <p>{aboutData.storyText}</p>
+              ) : (
+                <>
+                  <p>
+                    BNS Constructions was founded in 2010 by Bhavesh Patel with a team of just 12 tilers and a
+                    vision to deliver precision tiling at every scale. Starting with residential projects
+                    in Surat, the company quickly earned a reputation for quality and reliability.
+                  </p>
+                  <p>
+                    By 2015, BNS Constructions had expanded into commercial and industrial tiling, taking on
+                    landmark projects including the Crystal Mall in Surat and the Zydus Pharma Complex
+                    in Ahmedabad.
+                  </p>
+                  <p>
+                    Today, with a workforce of 200+ skilled professionals and operations across 10+
+                    cities in Gujarat, BNS Constructions stands as the region&apos;s most trusted tile
+                    pasting contractor for high-rise and large-scale construction.
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -77,7 +110,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-14">
             <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">Our Strengths</p>
-            <h2 className="font-cormorant text-5xl text-light">Why BNS Infra</h2>
+            <h2 className="font-cormorant text-5xl text-light">Why BNS Constructions</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {usps.map((usp) => {
@@ -102,7 +135,7 @@ export default function AboutPage() {
           <h2 className="font-cormorant text-5xl text-light">Leadership</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-          {team.map((member) => (
+          {team.map((member: { name: string; role: string }) => (
             <div key={member.name} className="bg-dark-card border border-white/10 overflow-hidden">
               <div
                 className="aspect-[4/3]"

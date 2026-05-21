@@ -1,11 +1,39 @@
+import { Metadata } from "next";
 import { Building2, Home, Store, Layers, CheckCircle2 } from "lucide-react";
+import { client } from "@/lib/sanity";
+import { servicesQuery } from "@/lib/queries";
 
-const services = [
+export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: 'Our Services — Tile Application',
+  description: 'BNS Constructions offers complete tile application services — high-rise tiling, residential flooring, commercial tile work, and wall cladding across Gujarat.',
+  openGraph: {
+    title: 'Tile Application Services | BNS Constructions',
+    url: 'https://bns-infra.vercel.app/services',
+  },
+  alternates: { canonical: 'https://bns-infra.vercel.app/services' }
+}
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Tile Application",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "BNS Constructions"
+  },
+  "areaServed": "Gujarat, India",
+  "name": "High-Rise Tile Pasting",
+  "description": "Professional tile pasting for high-rise residential and commercial buildings"
+}
+
+const fallbackServices = [
   {
     icon: Building2,
     title: "High-Rise Tiling",
     description:
-      "BNS Infra has completed over 200 high-rise tiling projects across Gujarat. We specialize in facade tiling, lobby flooring, and corridor wall cladding for towers up to 50 floors.",
+      "BNS Constructions has completed over 200 high-rise tiling projects across Gujarat. We specialize in facade tiling, lobby flooring, and corridor wall cladding for towers up to 50 floors.",
     bullets: [
       "Facade and exterior wall tiling up to 50+ floors",
       "Lobby, lift lobby, and corridor tiling",
@@ -55,32 +83,35 @@ const services = [
   },
 ];
 
+const iconMap: Record<string, React.ElementType> = {
+  Building2, Home, Store, Layers,
+}
+
 const processSteps = [
-  {
-    step: "01",
-    title: "Survey",
-    description: "On-site assessment of surfaces, area measurements, and material requirements.",
-  },
-  {
-    step: "02",
-    title: "Plan",
-    description: "Detailed layout drawings, material selection, and project timeline finalization.",
-  },
-  {
-    step: "03",
-    title: "Execute",
-    description: "Skilled crew deployment with quality checks at every stage of tile installation.",
-  },
-  {
-    step: "04",
-    title: "Handover",
-    description: "Final inspection, cleaning, and documentation handover with 1-year warranty.",
-  },
+  { step: "01", title: "Survey", description: "On-site assessment of surfaces, area measurements, and material requirements." },
+  { step: "02", title: "Plan", description: "Detailed layout drawings, material selection, and project timeline finalization." },
+  { step: "03", title: "Execute", description: "Skilled crew deployment with quality checks at every stage of tile installation." },
+  { step: "04", title: "Handover", description: "Final inspection, cleaning, and documentation handover with 1-year warranty." },
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const sanityServices = await client.fetch(servicesQuery).catch(() => []);
+
+  const services = sanityServices.length > 0
+    ? sanityServices.map((s: { icon?: string; title: string; fullDescription?: string; shortDescription?: string; features?: string[] }, index: number) => ({
+        icon: iconMap[s.icon ?? ''] ?? fallbackServices[index % fallbackServices.length].icon,
+        title: s.title,
+        description: s.fullDescription || s.shortDescription || '',
+        bullets: s.features || [],
+      }))
+    : fallbackServices;
+
   return (
     <div className="pt-20 bg-dark">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <div className="bg-dark-card border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">What We Offer</p>
@@ -88,7 +119,7 @@ export default function ServicesPage() {
             Our Services
           </h1>
           <p className="text-grey text-base max-w-2xl leading-relaxed">
-            From ground-level flooring to sky-high facade tiling, BNS Infra delivers end-to-end
+            From ground-level flooring to sky-high facade tiling, BNS Constructions delivers end-to-end
             tiling solutions for every type of construction project.
           </p>
         </div>
@@ -96,7 +127,7 @@ export default function ServicesPage() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <div className="space-y-16">
-          {services.map((service, index) => {
+          {services.map((service: { icon: React.ElementType; title: string; description: string; bullets: string[] }, index: number) => {
             const Icon = service.icon;
             return (
               <div
@@ -114,7 +145,7 @@ export default function ServicesPage() {
                   </div>
                   <p className="text-grey leading-relaxed mb-6">{service.description}</p>
                   <ul className="space-y-3">
-                    {service.bullets.map((bullet) => (
+                    {service.bullets.map((bullet: string) => (
                       <li key={bullet} className="flex items-start gap-3 text-sm text-grey">
                         <CheckCircle2 size={16} className="text-gold mt-0.5 shrink-0" />
                         {bullet}
