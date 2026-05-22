@@ -95,7 +95,6 @@ function buildPanels(data: SanityPanelData | null): PanelConfig[] {
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 const DUR = 0.4;
-const TITLE_Y_DEFAULT = 320;
 
 function Panel({ panel }: { panel: PanelConfig }) {
   const [hovered, setHovered] = useState(false);
@@ -107,54 +106,90 @@ function Panel({ panel }: { panel: PanelConfig }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url('${panel.image}')` }}
       />
+
+      {/* Bottom gradient — visible in default state */}
       <div
-        className="absolute inset-x-0 bottom-0 h-1/2"
+        className="absolute inset-x-0 bottom-0 h-2/3"
         style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85), transparent)" }}
       />
+
+      {/* Hover cream overlay */}
       <motion.div
-        className="absolute inset-0"
-        style={{ backgroundColor: "#F5F3EF" }}
+        className="absolute inset-0 bg-light"
         animate={{ opacity: hovered ? 0.9 : 0 }}
         transition={{ duration: DUR, ease: EASE }}
       />
-      <motion.p
-        className="absolute top-8 left-8 z-10 text-gold text-xs tracking-widest uppercase"
-        animate={{ opacity: hovered ? 0 : 1 }}
-        transition={{ duration: DUR, ease: EASE }}
+
+      {/* Default state layout: flex column, space-between, padding 24px / pb 40px */}
+      <div
+        className="absolute inset-0 flex flex-col justify-between z-10"
+        style={{ padding: "24px", paddingBottom: "40px" }}
       >
-        {panel.category}
-      </motion.p>
+        {/* TOP: category label — gold, small, uppercase, visible in default */}
+        <motion.p
+          className="text-gold text-xs tracking-widest uppercase"
+          animate={{ opacity: hovered ? 0 : 1 }}
+          transition={{ duration: DUR, ease: EASE }}
+        >
+          {panel.category}
+        </motion.p>
+
+        {/* BOTTOM: title + button stacked with gap, never overlapping */}
+        <div className="flex flex-col gap-4">
+          <motion.h2
+            className="font-cormorant text-2xl lg:text-3xl leading-tight text-light"
+            animate={{ opacity: hovered ? 0 : 1 }}
+            transition={{ duration: DUR, ease: EASE }}
+            aria-hidden={hovered}
+          >
+            {panel.title}
+          </motion.h2>
+
+          <motion.div
+            className="inline-block border w-fit"
+            animate={{
+              backgroundColor: hovered ? "#1A1A1A" : "transparent",
+              borderColor: hovered ? "#1A1A1A" : "#F5F3EF",
+            }}
+            transition={{ duration: DUR, ease: EASE }}
+          >
+            <Link
+              href={panel.href}
+              className="block px-6 py-3 text-xs tracking-[0.2em] uppercase text-white"
+            >
+              {panel.button}
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Hover: title at top-left in dark color */}
       <motion.h2
-        className="absolute top-8 left-8 right-8 z-10 font-cormorant text-4xl leading-tight"
-        animate={{ y: hovered ? 0 : TITLE_Y_DEFAULT, color: hovered ? "#1A1A1A" : "#F5F3EF" }}
+        className="absolute top-6 left-6 right-6 z-20 font-cormorant text-2xl lg:text-3xl leading-tight text-dark"
+        animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: DUR, ease: EASE }}
+        aria-hidden={!hovered}
       >
         {panel.title}
       </motion.h2>
+
+      {/* Hover: description centered */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center px-10 z-10 pointer-events-none"
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: DUR, ease: EASE }}
       >
-        <p className="text-center text-sm leading-relaxed max-w-[240px]" style={{ color: "#1A1A1A", fontFamily: "var(--font-dm-sans)" }}>
+        <p
+          className="text-center text-sm leading-relaxed max-w-[240px] text-dark font-dmsans"
+        >
           {panel.description}
         </p>
       </motion.div>
-      <div className="absolute bottom-0 left-0 p-8 z-10">
-        <motion.div
-          className="inline-block border w-fit"
-          animate={{ backgroundColor: hovered ? "#1A1A1A" : "transparent", borderColor: hovered ? "#1A1A1A" : "#F5F3EF" }}
-          transition={{ duration: DUR, ease: EASE }}
-        >
-          <Link href={panel.href} className="block px-6 py-3 text-xs tracking-[0.2em] uppercase text-white">
-            {panel.button}
-          </Link>
-        </motion.div>
-      </div>
     </div>
   );
 }
