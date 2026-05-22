@@ -1,4 +1,4 @@
-// BNS Infra — static source-code test suite
+// BNS Constructions — static source-code test suite
 // Checks every page, component, link, and section by reading source files.
 // Run: node scripts/test-website.js
 
@@ -107,7 +107,7 @@ if (homePage) {
 
 // Footer
 check(footer !== null,                          'Footer component file exists',                 'Footer component file missing');
-check(has(footer, 'BNS INFRA'),                 'Footer has BNS INFRA logo',                   'Footer logo text missing');
+check(has(footer, 'BNS CONSTRUCTIONS'),                 'Footer has BNS CONSTRUCTIONS logo',                   'Footer logo text missing');
 check(has(footer, 'href: "/"'),                 'Footer has Home link (/)',                     'Footer Home link missing');
 check(has(footer, 'href: "/projects"'),         'Footer has Projects link',                    'Footer Projects link missing');
 check(has(footer, 'href: "/services"'),         'Footer has Services link',                    'Footer Services link missing');
@@ -123,7 +123,7 @@ check(has(footer, 'Gujarat'),                   'Footer has address with Gujarat
 section('NAVBAR');
 
 check(navbar !== null,                          'Navbar component file exists',                'Navbar component file missing');
-check(has(navbar, 'BNS INFRA'),                 'BNS INFRA logo text exists',                 'BNS INFRA logo text missing');
+check(has(navbar, 'BNS CONSTRUCTIONS'),                 'BNS CONSTRUCTIONS logo text exists',                 'BNS CONSTRUCTIONS logo text missing');
 check(has(navbar, 'href="/"'),                  'Navbar logo points to /',                    'Navbar logo href wrong or missing');
 check(has(navbar, 'Menu'),                      'Hamburger icon (Menu) exists',               'Hamburger icon missing');
 check(has(navbar, 'setMenuOpen(true)'),         'Hamburger click opens menu',                 'Hamburger click handler missing');

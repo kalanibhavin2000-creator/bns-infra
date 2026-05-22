@@ -15,12 +15,12 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="font-cormorant text-2xl tracking-widest text-gold mb-4">BNS INFRA</h3>
+            <h3 className="font-cormorant text-2xl tracking-widest text-gold mb-4">BNS CONSTRUCTIONS</h3>
             <p className="text-grey text-sm leading-relaxed mb-4">
               Precision Tiling for Every Scale
             </p>
             <p className="text-grey text-sm leading-relaxed">
-              BNS Infra is a leading tile pasting contractor specializing in high-rise buildings,
+              BNS Constructions is a leading tile pasting contractor specializing in high-rise buildings,
               commercial complexes, residential projects, and industrial facilities across Gujarat.
             </p>
           </div>
@@ -75,7 +75,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-grey text-xs">
-            &copy; {new Date().getFullYear()} BNS Infra. All rights reserved.
+            &copy; {new Date().getFullYear()} BNS Constructions. All rights reserved.
           </p>
           <p className="text-grey text-xs">
             Precision Tiling for Every Scale

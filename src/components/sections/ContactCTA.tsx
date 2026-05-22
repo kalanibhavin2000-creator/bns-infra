@@ -30,7 +30,7 @@ export default function ContactCTA() {
           Ready to Build Something Great?
         </h2>
         <p className="text-grey text-base leading-relaxed mb-10 max-w-xl mx-auto">
-          Whether it's a single floor or a 40-story tower, BNS Infra delivers precision tiling
+          Whether it's a single floor or a 40-story tower, BNS Constructions delivers precision tiling
           that stands the test of time. Let's discuss your project today.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

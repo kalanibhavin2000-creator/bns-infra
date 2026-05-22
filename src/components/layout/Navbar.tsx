@@ -86,7 +86,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-20">
           <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold">
-            BNS INFRA
+            BNS CONSTRUCTIONS
           </Link>
         </div>
       </motion.nav>
@@ -121,7 +121,7 @@ export default function Navbar() {
                 className="font-cormorant text-2xl tracking-widest text-gold"
                 onClick={() => setMenuOpen(false)}
               >
-                BNS INFRA
+                BNS CONSTRUCTIONS
               </Link>
               {/* Close button — same size/style as hamburger */}
               <button

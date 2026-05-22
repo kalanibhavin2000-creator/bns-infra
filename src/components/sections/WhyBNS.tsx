@@ -34,7 +34,7 @@ export default function WhyBNS() {
         <div className="mb-14 text-center">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">Our Edge</p>
           <h2 className="font-cormorant text-5xl md:text-6xl text-light leading-tight">
-            Why Choose BNS Infra
+            Why Choose BNS Constructions
           </h2>
         </div>
 
