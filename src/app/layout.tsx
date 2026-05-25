@@ -5,6 +5,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 import CursorFollower from "@/components/ui/CursorFollower";
+import { client } from "@/sanity/lib/client";
+import type { SanityImageSource } from "@sanity/image-url";
 
 const cormorantGaramond = Cormorant_Garamond({
   weight: ["400", "600", "700"],
@@ -123,11 +125,15 @@ const localBusinessSchema = {
   "sameAs": []
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteSettings = await client.fetch<{ logo?: SanityImageSource }>(
+    `*[_type == "siteSettings"][0]{ logo }`
+  );
+
   return (
     <html
       lang="en"
@@ -139,11 +145,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
         <CursorFollower />
-        <Navbar />
+        <Navbar logo={siteSettings?.logo} />
         <PageTransition>
           <main className="flex-1">{children}</main>
         </PageTransition>
-        <Footer />
+        <Footer logo={siteSettings?.logo} />
       </body>
     </html>
   );

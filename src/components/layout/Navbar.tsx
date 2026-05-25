@@ -2,8 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { urlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -43,7 +46,28 @@ const itemVariants = {
   exit: { opacity: 0, y: 20, transition: { duration: 0.2 } },
 };
 
-export default function Navbar() {
+function LogoContent({ logo, className }: { logo?: SanityImageSource; className?: string }) {
+  if (logo) {
+    return (
+      <Image
+        src={urlFor(logo).height(80).auto("format").url()}
+        alt="BNS Constructions"
+        width={0}
+        height={0}
+        sizes="200px"
+        style={{ height: "40px", width: "auto" }}
+        className={className}
+      />
+    );
+  }
+  return (
+    <span className={`font-cormorant text-2xl tracking-widest text-gold ${className ?? ""}`}>
+      BNS CONSTRUCTIONS
+    </span>
+  );
+}
+
+export default function Navbar({ logo }: { logo?: SanityImageSource }) {
   const [scrolled, setScrolled] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -85,8 +109,8 @@ export default function Navbar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-20">
-          <Link href="/" className="font-cormorant text-2xl tracking-widest text-gold">
-            BNS CONSTRUCTIONS
+          <Link href="/" className="flex items-center">
+            <LogoContent logo={logo} />
           </Link>
         </div>
       </motion.nav>
@@ -118,10 +142,10 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-6 lg:px-8 h-20 shrink-0">
               <Link
                 href="/"
-                className="font-cormorant text-2xl tracking-widest text-gold"
+                className="flex items-center"
                 onClick={() => setMenuOpen(false)}
               >
-                BNS CONSTRUCTIONS
+                <LogoContent logo={logo} />
               </Link>
               {/* Close button — same size/style as hamburger */}
               <button

@@ -1,5 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { urlFor } from "@/sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 
 const quickLinks = [
   { label: "Home", href: "/" },
@@ -9,13 +12,26 @@ const quickLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-export default function Footer() {
+export default function Footer({ logo }: { logo?: SanityImageSource }) {
   return (
     <footer className="bg-dark border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="font-cormorant text-2xl tracking-widest text-gold mb-4">BNS CONSTRUCTIONS</h3>
+            {logo ? (
+              <div className="mb-4">
+                <Image
+                  src={urlFor(logo).height(64).auto("format").url()}
+                  alt="BNS Constructions"
+                  width={0}
+                  height={0}
+                  sizes="200px"
+                  style={{ height: "32px", width: "auto", filter: "brightness(0) invert(1)" }}
+                />
+              </div>
+            ) : (
+              <h3 className="font-cormorant text-2xl tracking-widest text-gold mb-4">BNS CONSTRUCTIONS</h3>
+            )}
             <p className="text-grey text-sm leading-relaxed mb-4">
               Precision Tiling for Every Scale
             </p>
