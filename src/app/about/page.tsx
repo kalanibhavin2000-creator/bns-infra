@@ -29,21 +29,15 @@ const usps = [
   { icon: ShieldCheck, title: "Safety First", description: "Zero-accident policy on every site." },
 ];
 
-const fallbackTeam = [
-  { name: "Bhavesh Patel", role: "Founder & Managing Director" },
-  { name: "Nilesh Shah", role: "Head of Operations" },
-  { name: "Suresh Mehta", role: "Senior Project Manager" },
-];
-
 export default async function AboutPage() {
   const [aboutData, teamData] = await Promise.all([
     client.fetch(aboutPageQuery).catch(() => null),
     client.fetch(teamQuery).catch(() => []),
   ]);
 
-  const team = teamData.length > 0
+  const team: { name: string; role: string }[] = Array.isArray(teamData)
     ? teamData.map((m: { name: string; role: string }) => ({ name: m.name, role: m.role }))
-    : fallbackTeam;
+    : [];
 
   const heroHeading = aboutData?.heroHeading || "Built on Precision, Driven by Passion";
   const heroSubtext = aboutData?.heroSubtext || "For over 15 years, BNS Constructions has been Gujarat's trusted name in tile pasting, transforming construction projects of every scale with craftsmanship and commitment.";
@@ -129,26 +123,28 @@ export default async function AboutPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
-        <div className="text-center mb-14">
-          <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">The Team</p>
-          <h2 className="font-cormorant text-5xl text-light">Leadership</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-          {team.map((member: { name: string; role: string }) => (
-            <div key={member.name} className="bg-dark-card border border-white/10 overflow-hidden">
-              <div
-                className="aspect-[4/3]"
-                style={{ background: "linear-gradient(135deg, #1a1a2e, #2e2e4a)" }}
-              />
-              <div className="p-5 text-center">
-                <h3 className="font-cormorant text-xl text-light">{member.name}</h3>
-                <p className="text-gold text-xs tracking-wider uppercase mt-1">{member.role}</p>
+      {team.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
+          <div className="text-center mb-14">
+            <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">The Team</p>
+            <h2 className="font-cormorant text-5xl text-light">Leadership</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+            {team.map((member) => (
+              <div key={member.name} className="bg-dark-card border border-white/10 overflow-hidden">
+                <div
+                  className="aspect-[4/3]"
+                  style={{ background: "linear-gradient(135deg, #1a1a2e, #2e2e4a)" }}
+                />
+                <div className="p-5 text-center">
+                  <h3 className="font-cormorant text-xl text-light">{member.name}</h3>
+                  <p className="text-gold text-xs tracking-wider uppercase mt-1">{member.role}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
