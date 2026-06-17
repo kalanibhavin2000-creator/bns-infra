@@ -21,16 +21,16 @@ export default function Footer({ logo }: { logo?: SanityImageSource }) {
             {logo ? (
               <div className="mb-4">
                 <Image
-                  src={urlFor(logo).height(64).auto("format").url()}
+                  src={urlFor(logo).height(192).auto("format").url()}
                   alt="BNS Constructions"
                   width={0}
                   height={0}
-                  sizes="200px"
-                  style={{ height: "32px", width: "auto", filter: "brightness(0) invert(1)" }}
+                  sizes="600px"
+                  style={{ height: "96px", width: "auto", filter: "brightness(0) invert(1)" }}
                 />
               </div>
             ) : (
-              <h3 className="font-cormorant text-2xl tracking-widest text-gold mb-4">BNS CONSTRUCTIONS</h3>
+              <h3 className="font-cormorant text-7xl tracking-widest text-gold mb-4">BNS CONSTRUCTIONS</h3>
             )}
             <p className="text-grey text-sm leading-relaxed mb-4">
               Precision Tiling for Every Scale

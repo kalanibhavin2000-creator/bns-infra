@@ -50,18 +50,18 @@ function LogoContent({ logo, className }: { logo?: SanityImageSource; className?
   if (logo) {
     return (
       <Image
-        src={urlFor(logo).height(80).auto("format").url()}
+        src={urlFor(logo).height(240).auto("format").url()}
         alt="BNS Constructions"
         width={0}
         height={0}
-        sizes="200px"
-        style={{ height: "40px", width: "auto" }}
+        sizes="600px"
+        style={{ height: "120px", width: "auto" }}
         className={className}
       />
     );
   }
   return (
-    <span className={`font-cormorant text-2xl tracking-widest text-gold ${className ?? ""}`}>
+    <span className={`font-cormorant text-7xl tracking-widest text-gold ${className ?? ""}`}>
       BNS CONSTRUCTIONS
     </span>
   );
