@@ -50,12 +50,12 @@ function LogoContent({ logo, className }: { logo?: SanityImageSource; className?
   if (logo) {
     return (
       <Image
-        src={urlFor(logo).height(240).auto("format").url()}
+        src={urlFor(logo).height(152).auto("format").url()}
         alt="BNS Constructions"
         width={0}
         height={0}
         sizes="600px"
-        style={{ height: "120px", width: "auto" }}
+        style={{ height: "76px", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)" }}
         className={className}
       />
     );
@@ -108,7 +108,7 @@ export default function Navbar({ logo }: { logo?: SanityImageSource }) {
         animate={{ y: navVisible ? 0 : -80 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-20 min-h-[76px]">
           <Link href="/" className="flex items-center">
             <LogoContent logo={logo} />
           </Link>
@@ -139,7 +139,7 @@ export default function Navbar({ logo }: { logo?: SanityImageSource }) {
             exit="exit"
           >
             {/* Top bar inside menu */}
-            <div className="flex items-center justify-between px-6 lg:px-8 h-20 shrink-0">
+            <div className="flex items-center justify-between px-6 lg:px-8 h-20 min-h-[76px] shrink-0">
               <Link
                 href="/"
                 className="flex items-center"
