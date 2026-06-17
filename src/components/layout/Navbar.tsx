@@ -108,7 +108,7 @@ export default function Navbar({ logo }: { logo?: SanityImageSource }) {
         animate={{ y: navVisible ? 0 : -80 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-20 min-h-[76px]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center h-[88px]">
           <Link href="/" className="flex items-center">
             <LogoContent logo={logo} />
           </Link>
@@ -120,7 +120,7 @@ export default function Navbar({ logo }: { logo?: SanityImageSource }) {
         <button
           onClick={() => setMenuOpen(true)}
           aria-label="Open menu"
-          className="fixed top-4 right-6 lg:right-8 z-[60] w-12 h-12 rounded-full flex items-center justify-center border border-gold/50 bg-black/40 backdrop-blur-sm"
+          className="fixed top-[20px] right-6 lg:right-8 z-[60] w-12 h-12 rounded-full flex items-center justify-center border border-gold/50 bg-black/40 backdrop-blur-sm"
           style={{ color: "#C8A96E" }}
         >
           <Menu size={32} />
@@ -139,7 +139,7 @@ export default function Navbar({ logo }: { logo?: SanityImageSource }) {
             exit="exit"
           >
             {/* Top bar inside menu */}
-            <div className="flex items-center justify-between px-6 lg:px-8 h-20 min-h-[76px] shrink-0">
+            <div className="flex items-center justify-between px-6 lg:px-8 h-[88px] shrink-0">
               <Link
                 href="/"
                 className="flex items-center"

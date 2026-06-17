@@ -83,8 +83,7 @@ export default function HeroSlider({ slides: rawSlides = [] }: { slides?: Sanity
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${slide.image}')` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
 
           <div className="relative h-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col justify-center pt-20 pb-16">
             <motion.h1
