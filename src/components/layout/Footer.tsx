@@ -2,7 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
+import { client } from "@/sanity/lib/client";
 import type { SanityImageSource } from "@sanity/image-url";
+
+type SiteSettings = {
+  phone?: string;
+  email?: string;
+  address?: string;
+  footerTagline?: string;
+  copyrightText?: string;
+  socialLinks?: { platform: string; url: string }[];
+};
 
 const quickLinks = [
   { label: "Home", href: "/" },
@@ -12,7 +22,19 @@ const quickLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-export default function Footer({ logo }: { logo?: SanityImageSource }) {
+export default async function Footer({ logo }: { logo?: SanityImageSource }) {
+  const settings = await client
+    .fetch<SiteSettings>(
+      `*[_type == "siteSettings"][0]{ phone, email, address, footerTagline, copyrightText, socialLinks }`
+    )
+    .catch(() => null);
+
+  const phone = settings?.phone || null;
+  const email = settings?.email || null;
+  const address = settings?.address || null;
+  const footerTagline = settings?.footerTagline || "Precision Tiling for Every Scale";
+  const copyrightText = settings?.copyrightText || null;
+
   return (
     <footer className="bg-dark border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
@@ -32,9 +54,7 @@ export default function Footer({ logo }: { logo?: SanityImageSource }) {
             ) : (
               <h3 className="font-cormorant text-7xl tracking-widest text-gold mb-4">BNS CONSTRUCTIONS</h3>
             )}
-            <p className="text-grey text-sm leading-relaxed mb-4">
-              Precision Tiling for Every Scale
-            </p>
+            <p className="text-grey text-sm leading-relaxed mb-4">{footerTagline}</p>
             <p className="text-grey text-sm leading-relaxed">
               BNS Constructions is a leading tile pasting contractor specializing in high-rise buildings,
               commercial complexes, residential projects, and industrial facilities across Gujarat.
@@ -65,24 +85,39 @@ export default function Footer({ logo }: { logo?: SanityImageSource }) {
               Contact Info
             </h4>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <Phone size={16} className="text-gold mt-0.5 shrink-0" />
-                <a href="tel:+919876543210" className="text-grey text-sm hover:text-gold transition-colors">
-                  +91 98765 43210
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail size={16} className="text-gold mt-0.5 shrink-0" />
-                <a href="mailto:info@bnsinfra.com" className="text-grey text-sm hover:text-gold transition-colors">
-                  info@bnsinfra.com
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin size={16} className="text-gold mt-0.5 shrink-0" />
-                <span className="text-grey text-sm">
-                  123, Tileworks Complex, Ring Road,<br />Surat, Gujarat – 395001
-                </span>
-              </li>
+              {phone && (
+                <li className="flex items-start gap-3">
+                  <Phone size={16} className="text-gold mt-0.5 shrink-0" />
+                  <a
+                    href={`tel:+${phone.replace(/\D/g, "")}`}
+                    className="text-grey text-sm hover:text-gold transition-colors"
+                  >
+                    {phone}
+                  </a>
+                </li>
+              )}
+              {email && (
+                <li className="flex items-start gap-3">
+                  <Mail size={16} className="text-gold mt-0.5 shrink-0" />
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-grey text-sm hover:text-gold transition-colors"
+                  >
+                    {email}
+                  </a>
+                </li>
+              )}
+              {address && (
+                <li className="flex items-start gap-3">
+                  <MapPin size={16} className="text-gold mt-0.5 shrink-0" />
+                  <span className="text-grey text-sm" style={{ whiteSpace: "pre-line" }}>
+                    {address}
+                  </span>
+                </li>
+              )}
+              {!phone && !email && !address && (
+                <li className="text-grey/40 text-sm">Add contact info in CMS</li>
+              )}
             </ul>
           </div>
         </div>
@@ -91,11 +126,9 @@ export default function Footer({ logo }: { logo?: SanityImageSource }) {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-grey text-xs">
-            &copy; {new Date().getFullYear()} BNS Constructions. All rights reserved.
+            {copyrightText || `© ${new Date().getFullYear()} BNS Constructions. All rights reserved.`}
           </p>
-          <p className="text-grey text-xs">
-            Precision Tiling for Every Scale
-          </p>
+          <p className="text-grey text-xs">{footerTagline}</p>
         </div>
       </div>
     </footer>

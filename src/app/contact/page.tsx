@@ -1,6 +1,10 @@
 import { Metadata } from "next";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import ContactForm from "@/components/sections/ContactForm";
+import { client } from "@/lib/sanity";
+import { contactPageQuery } from "@/lib/queries";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Contact Us — Get a Quote',
@@ -43,7 +47,41 @@ const faqSchema = {
   ]
 }
 
-export default function ContactPage() {
+type ContactData = {
+  heading?: string;
+  subtext?: string;
+  phone?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  googleMapsEmbedUrl?: string;
+};
+
+type SiteSettingsContact = {
+  phone?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  googleMapsUrl?: string;
+};
+
+export default async function ContactPage() {
+  const [contactData, siteSettings] = await Promise.all([
+    client.fetch<ContactData>(contactPageQuery).catch(() => null),
+    client.fetch<SiteSettingsContact>(
+      `*[_type == "siteSettings"][0]{ phone, whatsapp, email, address, googleMapsUrl }`
+    ).catch(() => null),
+  ]);
+
+  const phone = contactData?.phone || siteSettings?.phone || "Add phone in CMS";
+  const whatsapp = contactData?.whatsapp || siteSettings?.whatsapp || siteSettings?.phone || phone;
+  const email = contactData?.email || siteSettings?.email || "Add email in CMS";
+  const address = contactData?.address || siteSettings?.address || "Add address in CMS";
+  const googleMapsUrl = contactData?.googleMapsEmbedUrl || siteSettings?.googleMapsUrl || null;
+
+  const waNumber = whatsapp.replace(/\D/g, "");
+  const telNumber = phone.replace(/\D/g, "");
+
   return (
     <div className="pt-20 bg-dark min-h-screen">
       <script
@@ -54,8 +92,11 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">Reach Out</p>
           <h1 className="font-cormorant text-6xl md:text-7xl text-light leading-none">
-            Get in Touch
+            {contactData?.heading || "Get in Touch"}
           </h1>
+          {contactData?.subtext && (
+            <p className="text-grey text-base max-w-2xl mt-4 leading-relaxed">{contactData.subtext}</p>
+          )}
         </div>
       </div>
 
@@ -70,9 +111,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-light text-sm font-medium mb-1">Address</p>
-                  <p className="text-grey text-sm leading-relaxed">
-                    123, Tileworks Complex, Ring Road,<br />
-                    Surat, Gujarat – 395001
+                  <p className="text-grey text-sm leading-relaxed" style={{ whiteSpace: "pre-line" }}>
+                    {address}
                   </p>
                 </div>
               </div>
@@ -82,9 +122,13 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-light text-sm font-medium mb-1">Phone</p>
-                  <a href="tel:+919876543210" className="text-grey text-sm hover:text-gold transition-colors">
-                    +91 98765 43210
-                  </a>
+                  {telNumber ? (
+                    <a href={`tel:+${telNumber}`} className="text-grey text-sm hover:text-gold transition-colors">
+                      {phone}
+                    </a>
+                  ) : (
+                    <span className="text-grey text-sm">{phone}</span>
+                  )}
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -93,28 +137,46 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-light text-sm font-medium mb-1">Email</p>
-                  <a href="mailto:info@bnsinfra.com" className="text-grey text-sm hover:text-gold transition-colors">
-                    info@bnsinfra.com
-                  </a>
+                  {email.includes("@") ? (
+                    <a href={`mailto:${email}`} className="text-grey text-sm hover:text-gold transition-colors">
+                      {email}
+                    </a>
+                  ) : (
+                    <span className="text-grey text-sm">{email}</span>
+                  )}
                 </div>
               </div>
             </div>
 
-            <a
-              href="https://wa.me/919876543210"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-6 py-3 bg-green-600 hover:bg-green-500 text-white text-sm tracking-wider uppercase transition-colors duration-200"
-            >
-              <MessageCircle size={18} />
-              Chat on WhatsApp
-            </a>
+            {waNumber && (
+              <a
+                href={`https://wa.me/${waNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-6 py-3 bg-green-600 hover:bg-green-500 text-white text-sm tracking-wider uppercase transition-colors duration-200"
+              >
+                <MessageCircle size={18} />
+                Chat on WhatsApp
+              </a>
+            )}
 
-            <div className="mt-12 bg-dark-card border border-white/10 aspect-video flex items-center justify-center">
-              <div className="text-center">
-                <MapPin size={32} className="text-grey/40 mx-auto mb-3" />
-                <p className="text-grey text-sm">Map Coming Soon</p>
-              </div>
+            <div className="mt-12 bg-dark-card border border-white/10 aspect-video flex items-center justify-center overflow-hidden">
+              {googleMapsUrl ? (
+                <iframe
+                  src={googleMapsUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
+                <div className="text-center">
+                  <MapPin size={32} className="text-grey/40 mx-auto mb-3" />
+                  <p className="text-grey text-sm">Map Coming Soon</p>
+                </div>
+              )}
             </div>
           </div>
 

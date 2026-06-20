@@ -87,24 +87,45 @@ const iconMap: Record<string, React.ElementType> = {
   Building2, Home, Store, Layers,
 }
 
-const processSteps = [
+const fallbackProcessSteps = [
   { step: "01", title: "Survey", description: "On-site assessment of surfaces, area measurements, and material requirements." },
   { step: "02", title: "Plan", description: "Detailed layout drawings, material selection, and project timeline finalization." },
   { step: "03", title: "Execute", description: "Skilled crew deployment with quality checks at every stage of tile installation." },
   { step: "04", title: "Handover", description: "Final inspection, cleaning, and documentation handover with 1-year warranty." },
 ];
 
+type SanityServiceRaw = {
+  icon?: string;
+  title: string;
+  fullDescription?: string;
+  shortDescription?: string;
+  features?: string[];
+  processSteps?: { stepNumber: number; title: string; description: string }[];
+};
+
 export default async function ServicesPage() {
-  const sanityServices = await client.fetch(servicesQuery).catch(() => []);
+  const sanityServices: SanityServiceRaw[] = await client.fetch(servicesQuery).catch(() => []);
 
   const services = sanityServices.length > 0
-    ? sanityServices.map((s: { icon?: string; title: string; fullDescription?: string; shortDescription?: string; features?: string[] }, index: number) => ({
+    ? sanityServices.map((s, index) => ({
         icon: iconMap[s.icon ?? ''] ?? fallbackServices[index % fallbackServices.length].icon,
         title: s.title,
         description: s.fullDescription || s.shortDescription || '',
         bullets: s.features || [],
       }))
     : fallbackServices;
+
+  const sanitySteps = sanityServices
+    .flatMap((s) => s.processSteps ?? [])
+    .sort((a, b) => a.stepNumber - b.stepNumber);
+
+  const processSteps = sanitySteps.length > 0
+    ? sanitySteps.map((s) => ({
+        step: String(s.stepNumber).padStart(2, "0"),
+        title: s.title,
+        description: s.description,
+      }))
+    : fallbackProcessSteps;
 
   return (
     <div className="pt-20 bg-dark">

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Scale, Clock, Award, ShieldCheck } from "lucide-react";
 import { client } from "@/lib/sanity";
-import { aboutPageQuery, teamQuery } from "@/lib/queries";
+import { aboutPageQuery, teamQuery, statsQuery } from "@/lib/queries";
 
 export const revalidate = 60;
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bns-infra.vercel.app/about' }
 }
 
-const stats = [
+const fallbackStats = [
   { value: "500+", label: "Projects Completed" },
   { value: "15+", label: "Years of Excellence" },
   { value: "2M+", label: "Sq Ft Tiled" },
@@ -30,10 +30,16 @@ const usps = [
 ];
 
 export default async function AboutPage() {
-  const [aboutData, teamData] = await Promise.all([
+  const [aboutData, teamData, statsData] = await Promise.all([
     client.fetch(aboutPageQuery).catch(() => null),
     client.fetch(teamQuery).catch(() => []),
+    client.fetch(statsQuery).catch(() => []),
   ]);
+
+  const stats: { value: string; label: string }[] =
+    Array.isArray(statsData) && statsData.length > 0
+      ? statsData.map((s: { value: string; label: string }) => ({ value: s.value, label: s.label }))
+      : fallbackStats;
 
   const team: { name: string; role: string }[] = Array.isArray(teamData)
     ? teamData.map((m: { name: string; role: string }) => ({ name: m.name, role: m.role }))
