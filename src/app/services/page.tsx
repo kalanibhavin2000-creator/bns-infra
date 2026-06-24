@@ -89,12 +89,6 @@ const iconMap: Record<string, React.ElementType> = {
   Building2, Home, Store, Layers,
 }
 
-const fallbackProcessSteps = [
-  { step: "01", title: "Survey", description: "On-site assessment of surfaces, area measurements, and material requirements." },
-  { step: "02", title: "Plan", description: "Detailed layout drawings, material selection, and project timeline finalization." },
-  { step: "03", title: "Execute", description: "Skilled crew deployment with quality checks at every stage of tile installation." },
-  { step: "04", title: "Handover", description: "Final inspection, cleaning, and documentation handover with 1-year warranty." },
-];
 
 type SanityServiceRaw = {
   icon?: string;
@@ -102,7 +96,6 @@ type SanityServiceRaw = {
   fullDescription?: string;
   shortDescription?: string;
   features?: string[];
-  processSteps?: { stepNumber: number; title: string; description: string }[];
   mainImage?: object;
 };
 
@@ -115,17 +108,9 @@ export default async function ServicesPage() {
         title: s.title,
         description: s.fullDescription || s.shortDescription || '',
         bullets: s.features || [],
-        processSteps: (s.processSteps ?? [])
-          .slice()
-          .sort((a, b) => a.stepNumber - b.stepNumber)
-          .map((p) => ({
-            step: String(p.stepNumber).padStart(2, "0"),
-            title: p.title,
-            description: p.description,
-          })),
         mainImage: s.mainImage ?? null,
       }))
-    : fallbackServices.map((s) => ({ ...s, processSteps: fallbackProcessSteps, mainImage: null }));
+    : fallbackServices.map((s) => ({ ...s, mainImage: null }));
 
   return (
     <div className="pt-20 bg-dark">
@@ -148,7 +133,7 @@ export default async function ServicesPage() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <div className="space-y-24">
-          {services.map((service: { icon: React.ElementType; title: string; description: string; bullets: string[]; processSteps: { step: string; title: string; description: string }[]; mainImage: object | null }, index: number) => {
+          {services.map((service: { icon: React.ElementType; title: string; description: string; bullets: string[]; mainImage: object | null }, index: number) => {
             const Icon = service.icon;
             return (
               <div key={service.title}>
@@ -194,25 +179,6 @@ export default async function ServicesPage() {
                   </div>
                 </div>
 
-                {service.processSteps.length > 0 && (
-                  <div className="mt-10 bg-dark-card border border-white/10 p-8">
-                    <p className="text-gold text-xs tracking-[0.3em] uppercase mb-6">How We Work</p>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                      {service.processSteps.map((step, i) => (
-                        <div key={step.step} className="relative">
-                          {i < service.processSteps.length - 1 && (
-                            <div className="hidden md:block absolute top-8 left-full w-full h-px bg-gold/20 z-0" />
-                          )}
-                          <div className="relative bg-dark border border-white/10 p-6">
-                            <span className="font-cormorant text-5xl text-gold/20 block mb-3">{step.step}</span>
-                            <h3 className="font-cormorant text-2xl text-light mb-2">{step.title}</h3>
-                            <p className="text-grey text-sm leading-relaxed">{step.description}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             );
           })}
