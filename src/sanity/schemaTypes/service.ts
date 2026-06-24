@@ -11,6 +11,7 @@ const service: SchemaTypeDefinition = {
     { name: 'shortDescription', title: 'Short Description', type: 'text' },
     { name: 'fullDescription', title: 'Full Description', type: 'text' },
     { name: 'features', title: 'Features List', type: 'array', of: [{ type: 'string' }] },
+    { name: 'mainImage', title: 'Main Image', type: 'image', options: { hotspot: true } },
     {
       name: 'processSteps', title: 'Process Steps', type: 'array',
       of: [{

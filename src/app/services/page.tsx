@@ -1,7 +1,9 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { Building2, Home, Store, Layers, CheckCircle2 } from "lucide-react";
 import { client } from "@/lib/sanity";
 import { servicesQuery } from "@/lib/queries";
+import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
 
@@ -101,6 +103,7 @@ type SanityServiceRaw = {
   shortDescription?: string;
   features?: string[];
   processSteps?: { stepNumber: number; title: string; description: string }[];
+  mainImage?: object;
 };
 
 export default async function ServicesPage() {
@@ -112,20 +115,17 @@ export default async function ServicesPage() {
         title: s.title,
         description: s.fullDescription || s.shortDescription || '',
         bullets: s.features || [],
+        processSteps: (s.processSteps ?? [])
+          .slice()
+          .sort((a, b) => a.stepNumber - b.stepNumber)
+          .map((p) => ({
+            step: String(p.stepNumber).padStart(2, "0"),
+            title: p.title,
+            description: p.description,
+          })),
+        mainImage: s.mainImage ?? null,
       }))
-    : fallbackServices;
-
-  const sanitySteps = sanityServices
-    .flatMap((s) => s.processSteps ?? [])
-    .sort((a, b) => a.stepNumber - b.stepNumber);
-
-  const processSteps = sanitySteps.length > 0
-    ? sanitySteps.map((s) => ({
-        step: String(s.stepNumber).padStart(2, "0"),
-        title: s.title,
-        description: s.description,
-      }))
-    : fallbackProcessSteps;
+    : fallbackServices.map((s) => ({ ...s, processSteps: fallbackProcessSteps, mainImage: null }));
 
   return (
     <div className="pt-20 bg-dark">
@@ -147,67 +147,75 @@ export default async function ServicesPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
-        <div className="space-y-16">
-          {services.map((service: { icon: React.ElementType; title: string; description: string; bullets: string[] }, index: number) => {
+        <div className="space-y-24">
+          {services.map((service: { icon: React.ElementType; title: string; description: string; bullets: string[]; processSteps: { step: string; title: string; description: string }[]; mainImage: object | null }, index: number) => {
             const Icon = service.icon;
             return (
-              <div
-                key={service.title}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-start ${
-                  index % 2 === 1 ? "lg:flex-row-reverse" : ""
-                }`}
-              >
-                <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                  <div className="flex items-center gap-4 mb-5">
-                    <div className="bg-gold/10 border border-gold/20 p-3">
-                      <Icon size={28} className="text-gold" />
-                    </div>
-                    <h2 className="font-cormorant text-4xl text-light">{service.title}</h2>
-                  </div>
-                  <p className="text-grey leading-relaxed mb-6">{service.description}</p>
-                  <ul className="space-y-3">
-                    {service.bullets.map((bullet: string) => (
-                      <li key={bullet} className="flex items-start gap-3 text-sm text-grey">
-                        <CheckCircle2 size={16} className="text-gold mt-0.5 shrink-0" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div key={service.title}>
                 <div
-                  className={`aspect-[4/3] bg-dark-card border border-white/10 ${
-                    index % 2 === 1 ? "lg:order-1" : ""
+                  className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-start ${
+                    index % 2 === 1 ? "lg:flex-row-reverse" : ""
                   }`}
-                  style={{
-                    background: `linear-gradient(135deg, #${(index * 0x111 + 0x0a0a10).toString(16).slice(-6)} 0%, #1a1a2e 100%)`,
-                  }}
-                />
+                >
+                  <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                    <div className="flex items-center gap-4 mb-5">
+                      <div className="bg-gold/10 border border-gold/20 p-3">
+                        <Icon size={28} className="text-gold" />
+                      </div>
+                      <h2 className="font-cormorant text-4xl text-light">{service.title}</h2>
+                    </div>
+                    <p className="text-grey leading-relaxed mb-6">{service.description}</p>
+                    <ul className="space-y-3">
+                      {service.bullets.map((bullet: string) => (
+                        <li key={bullet} className="flex items-start gap-3 text-sm text-grey">
+                          <CheckCircle2 size={16} className="text-gold mt-0.5 shrink-0" />
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div
+                    className={`relative aspect-[4/3] bg-dark-card border border-white/10 overflow-hidden ${
+                      index % 2 === 1 ? "lg:order-1" : ""
+                    }`}
+                    style={service.mainImage ? undefined : {
+                      background: `linear-gradient(135deg, #${(index * 0x111 + 0x0a0a10).toString(16).slice(-6)} 0%, #1a1a2e 100%)`,
+                    }}
+                  >
+                    {service.mainImage && (
+                      <Image
+                        src={urlFor(service.mainImage).width(800).height(600).url()}
+                        alt={service.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {service.processSteps.length > 0 && (
+                  <div className="mt-10 bg-dark-card border border-white/10 p-8">
+                    <p className="text-gold text-xs tracking-[0.3em] uppercase mb-6">How We Work</p>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                      {service.processSteps.map((step, i) => (
+                        <div key={step.step} className="relative">
+                          {i < service.processSteps.length - 1 && (
+                            <div className="hidden md:block absolute top-8 left-full w-full h-px bg-gold/20 z-0" />
+                          )}
+                          <div className="relative bg-dark border border-white/10 p-6">
+                            <span className="font-cormorant text-5xl text-gold/20 block mb-3">{step.step}</span>
+                            <h3 className="font-cormorant text-2xl text-light mb-2">{step.title}</h3>
+                            <p className="text-grey text-sm leading-relaxed">{step.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
-        </div>
-      </div>
-
-      <div className="bg-dark-card border-t border-white/10 py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">How We Work</p>
-            <h2 className="font-cormorant text-5xl text-light">Our Process</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {processSteps.map((step, i) => (
-              <div key={step.step} className="relative">
-                {i < processSteps.length - 1 && (
-                  <div className="hidden md:block absolute top-8 left-full w-full h-px bg-gold/20 z-0" />
-                )}
-                <div className="relative bg-dark border border-white/10 p-6">
-                  <span className="font-cormorant text-5xl text-gold/20 block mb-3">{step.step}</span>
-                  <h3 className="font-cormorant text-2xl text-light mb-2">{step.title}</h3>
-                  <p className="text-grey text-sm leading-relaxed">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
