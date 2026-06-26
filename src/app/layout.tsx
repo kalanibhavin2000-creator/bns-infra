@@ -79,7 +79,16 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://bns-infra.vercel.app',
-  }
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 }
 
 const localBusinessSchema = {
