@@ -78,11 +78,11 @@ export default async function AboutPage() {
                   <p>
                     BNS Constructions was founded in 2010 by Bhavesh Patel with a team of just 12 tilers and a
                     vision to deliver precision tiling at every scale. Starting with residential projects
-                    in Surat, the company quickly earned a reputation for quality and reliability.
+                    in Ahmedabad, the company quickly earned a reputation for quality and reliability.
                   </p>
                   <p>
                     By 2015, BNS Constructions had expanded into commercial and industrial tiling, taking on
-                    landmark projects including the Crystal Mall in Surat and the Zydus Pharma Complex
+                    landmark projects including the Crystal Mall in Ahmedabad and the Zydus Pharma Complex
                     in Ahmedabad.
                   </p>
                   <p>

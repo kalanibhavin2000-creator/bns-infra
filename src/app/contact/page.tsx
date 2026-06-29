@@ -25,7 +25,7 @@ const faqSchema = {
       "name": "What areas does BNS Constructions serve?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "BNS Constructions serves Surat, Ahmedabad, Vadodara, and all major cities across Gujarat, India."
+        "text": "BNS Constructions serves Ahmedabad, Vadodara, Bhavnagar, and all major cities across Gujarat, India."
       }
     },
     {

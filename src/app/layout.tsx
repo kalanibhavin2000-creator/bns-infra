@@ -24,18 +24,18 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL('https://bns-infra.vercel.app'),
   title: {
-    default: 'BNS Constructions | Tile Pasting Specialist — Surat, Gujarat',
+    default: 'BNS Constructions | Tile & EPC Turnkey Contractor — Ahmedabad, Gujarat',
     template: '%s | BNS Constructions'
   },
-  description: "BNS Constructions is Gujarat's most trusted tile application contractor for high-rise residential and commercial construction. 500+ projects completed across Surat, Ahmedabad, Vadodara.",
+  description: "BNS Constructions is Gujarat's most trusted tile application contractor for high-rise residential and commercial construction. 500+ projects completed across Ahmedabad, Vadodara, Bhavnagar.",
   keywords: [
-    'tile pasting contractor Surat',
+    'tile pasting contractor Ahmedabad',
     'tile application Gujarat',
     'high-rise tiling contractor India',
     'tile contractor Ahmedabad',
     'commercial tile flooring Gujarat',
     'construction tiling contractor',
-    'floor tile pasting Surat',
+    'floor tile pasting Ahmedabad',
     'wall cladding contractor Gujarat',
     'BNS Constructions',
     'tile contractor Vadodara'
@@ -59,18 +59,18 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://bns-infra.vercel.app',
     siteName: 'BNS Constructions',
-    title: 'BNS Constructions | Tile Pasting Specialist — Gujarat, India',
+    title: 'BNS Constructions | Tile & EPC Turnkey Contractor — Gujarat, India',
     description: "Gujarat's most trusted tile application contractor. 500+ projects. High-rise, residential and commercial construction.",
     images: [{
       url: '/og-image.jpg',
       width: 1200,
       height: 630,
-      alt: 'BNS Constructions — Tile Pasting Specialist'
+      alt: 'BNS Constructions — Tile & EPC Turnkey Contractor'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BNS Constructions | Tile Pasting Specialist',
+    title: 'BNS Constructions | Tile & EPC Turnkey Contractor',
     description: "Gujarat's most trusted tile application contractor for high-rise and commercial construction.",
     images: ['/og-image.jpg'],
   },
@@ -103,20 +103,20 @@ const localBusinessSchema = {
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Your Street Address",
-    "addressLocality": "Surat",
+    "addressLocality": "Ahmedabad",
     "addressRegion": "Gujarat",
-    "postalCode": "395001",
+    "postalCode": "380001",
     "addressCountry": "IN"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": "21.1702",
-    "longitude": "72.8311"
+    "latitude": "23.0225",
+    "longitude": "72.5714"
   },
   "areaServed": [
-    { "@type": "City", "name": "Surat" },
     { "@type": "City", "name": "Ahmedabad" },
     { "@type": "City", "name": "Vadodara" },
+    { "@type": "City", "name": "Bhavnagar" },
     { "@type": "State", "name": "Gujarat" }
   ],
   "serviceType": [

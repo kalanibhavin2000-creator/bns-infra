@@ -8,7 +8,7 @@ const projects = [
     status: "Completed",
     name: "Titanium World Tower",
     client: "Titanium Builders Pvt. Ltd.",
-    location: "Surat, Gujarat",
+    location: "Ahmedabad, Gujarat",
     bgColor: "#1a1a2e",
   },
   {

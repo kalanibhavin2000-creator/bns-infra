@@ -16,11 +16,11 @@ type SanitySlide = {
 };
 
 const fallbackSlides = [
-  { id: 1, category: "High-Rise", name: "Titanium World Tower", location: "Surat, Gujarat", image: "/images/building-highrise.jpg" },
+  { id: 1, category: "High-Rise", name: "Titanium World Tower", location: "Ahmedabad, Gujarat", image: "/images/building-highrise.jpg" },
   { id: 2, category: "Commercial", name: "Inorbit Mall Tiling", location: "Vadodara, Gujarat", image: "/images/building-commercial.jpg" },
   { id: 3, category: "Residential", name: "Green Valley Residency", location: "Ahmedabad, Gujarat", image: "/images/building-residential.jpg" },
   { id: 4, category: "Industrial", name: "Zydus Pharma Complex", location: "Ahmedabad, Gujarat", image: "/images/bns-office.jpeg" },
-  { id: 5, category: "High-Rise", name: "Blue Sapphire Heights", location: "Surat, Gujarat", image: "/images/highrise-render.webp" },
+  { id: 5, category: "High-Rise", name: "Blue Sapphire Heights", location: "Ahmedabad, Gujarat", image: "/images/highrise-render.webp" },
 ];
 
 type NormalizedSlide = {
